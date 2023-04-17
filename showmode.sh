@@ -3,19 +3,20 @@ echo "This script will configure your Mac for all needed software and settings f
 read -p "Are you ready to proceed? [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Script will start in 5..."
+   sleep 1
+   echo "4..."
+   sleep 1
+   echo "3..."
+   sleep 1
+   echo "2..."
+   sleep 1
+   echo "1..."
+   sleep 1
 else
   echo "Aborting installer"
   exit
 fi
-sleep 1
-echo "4..."
-sleep 1
-echo "3..."
-sleep 1
-echo "2..."
-sleep 1
-echo "1..."
-sleep 1
+###--- HOMEBREW INSTALL ---###
 read -p "Do you need to install Homebrew [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Installing Homebrew"
@@ -23,6 +24,7 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
 else
   echo "Skipping step"
 fi
+###--- APPLICATION LIST ---###
 read -p "Do you need to install applications [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   echo "Starting installtion of applications"
@@ -57,12 +59,13 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   #brew install --cask microsoft-word
   #brew install --cask microsoft-office
   #brew install --cask discord
-  #brew install --cask atom
+  brew install --cask atom
   #brew install --cask sony-ps-remote-play
   #brew install --cask 1password
   #brew install --cask steam
   #brew install --cask dolphin
   clear
+  ###--- NON-SCRIPT APPLICATIONS ---###
   echo "Applications Installed. Two pages will open in your browser for additional downloads to be completed."
   sleep 5
   open https://www.blackmagicdesign.com/support/
@@ -70,6 +73,7 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
 else
   echo "Skipping step"
 fi
+###--- SSYTEM SETTINGS ---###
 read -p "Do you need to apply system settings [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Now changing system settings"
