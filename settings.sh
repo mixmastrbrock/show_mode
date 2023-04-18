@@ -9,10 +9,15 @@ else
   echo "Skipping step"
 fi
 ###--- HOSTNAME ---###
-read -p "Enter the hostname you want to use: " new_name
-sudo scutil --set ComputerName "$new_name"
-sudo scutil --set HostName "$new_name"
-sudo scutil --set LocalHostName "$new_name"
+read -p "Do you want to change the hostname [yN]?" REPLY
+if [["$REPLY" =~ ^[Yy]$ ]]; then
+  read -p "Enter the hostname you want to use: " new_name
+  sudo scutil --set ComputerName "$new_name"
+  sudo scutil --set HostName "$new_name"
+  sudo scutil --set LocalHostName "$new_name"
+else
+  echo "Skipping step"
+fi
 ###--- FILE SHARING ---###
 read -p "Do you need file sharing between machines [yN?]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
