@@ -8,13 +8,18 @@ else
   exit
 fi
 ###--- SCRIPT UPDATE ---###
-read -p "Do you want to check for the latest version of this script [yN?]? If this the first deployment on hardware, you must answer yes." REPLY
+read -p "Do you want to check for the latest version of this script [yN?]? If this the first deployment, this is required." REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   echo "Checking..."
   curl https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/wan.sh -o wan.sh
+  curl https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/settings.sh -o settings.sh
   chmod +x wan.sh
+  chmod +x settings.sh
   ./wan.sh
 else
   echo "Skipping step"
+  ./wan.sh
 fi
-./wan.sh
+./settings.sh
+clear
+echo "Script complete. That's it. Get to work."
