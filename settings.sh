@@ -1,7 +1,7 @@
 #!/bin/bash
 ###--- WIFI ---###
 read -p "Do you want to add the video WiFi network [yN]?" REPLY
-if [["$REPLY" =~ ^[Yy]$ ]]; then
+if [[ "$REPLY" =~ ^[Yy]$ ]]; then
   echo "Adding network..."
   networksetup -addpreferredwirelessnetworkatindex en0 "HMXVideo2_AP" 0 WPA2 "harvestvideo"
   networksetup -addpreferredwirelessnetworkatindex en0 "Lancelot" 0 WPA2 "cobalt42"
