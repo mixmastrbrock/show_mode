@@ -71,12 +71,12 @@ fi
 read -p "Do you need to apply system settings [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Now changing system power settings"
-   sudo pmset -a displaysleep 0
-   sudo pmset -a disksleep 0
-   sudo pmset -a sleep 0
-   sudo pmset -a womp 1
-   sudo pmset -a autorestart 1
-   sudo pmset -a powerbutton 0
+   pmset -a displaysleep 0
+   pmset -a disksleep 0
+   pmset -a sleep 0
+   pmset -a womp 1
+   pmset -a autorestart 1
+   pmset -a powerbutton 0
    systemsetup -setusingnetworktime on
    systemsetup -setcomputersleep never
    systemsetup -setdisplaysleep never
