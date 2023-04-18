@@ -7,19 +7,22 @@ else
   echo "Aborting installer"
   exit
 fi
-###--- SCRIPT UPDATE ---###
-read -p "Do you want to check for the latest version of this script. If this the first deployment, this is required. [yN?]?" REPLY
-if [[ "$REPLY" =~ ^[Yy]$  ]]; then
-  echo "Checking..."
-  curl https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/wan.sh -o wan.sh
-  curl https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/settings.sh -o settings.sh
-  chmod +x wan.sh
-  chmod +x settings.sh
-  ./wan.sh
-else
-  echo "Skipping step"
-  ./wan.sh
+###--- WAN UPDATE ---###
+SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/wan.sh"
+SCRIPT_PATH="wan.sh"
+if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
+  curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
+  chmod +x "$SCRIPT_PATH"
 fi
+###--- SETTINGS UPDATE ---###
+SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/settings.sh"
+SCRIPT_PATH="settings.sh"
+if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
+  curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
+  chmod +x "$SCRIPT_PATH"
+  echo "Updated to the latest version of the script."
+fi
+./wan.sh
 ./settings.sh
 clear
 echo "Script complete. That's it. Get to work."

@@ -1,10 +1,18 @@
 #!/bin/bash
+###--- HOSTNAME ---###
+read -p "Enter the hostname you want to use: " new_name
+sudo scutil --set ComputerName "$new_name"
+sudo scutil --set HostName "$new_name"
+sudo scutil --set LocalHostName "$new_name"
 ###--- FILE SHARING ---###
 read -p "Do you need file sharing between machines [yN?]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
-  echo "Now changing system settings"
-  mkdir ~/ShowShare/
-  sharing -a ~/ShowShare/ -s 010 -e ShowShare -S ShowShare -g 010
+  read -p "Enter the folder name you wish to use: " folder
+  echo "Adding directory and enabling sharing"
+  mkdir ~/$folder/
+  sudo sharing -a ~/$folder/ -s "$folder"
+  sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.AppleFileServer.plist
+  sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.smbd.plist
 else
   echo "Skipping step"
 fi
@@ -13,6 +21,9 @@ read -p "Do you need to apply system settings [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Now changing system settings"
    osascript -e 'tell application "Finder" to set desktop picture to {class:"solid color", color:{0, 0, 0}}'
+   osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
+   osascript -e 'tell application "System Events" to tell notification preferences to set do not disturb to true'
+   defaults write "Apple Global Domain" com.apple.swipescrolldirection -bool true
    sudo pmset -a sleep 0 disksleep 0 displaysleep 0 womp 1 autorestart 1 powerbutton 0
    sudo systemsetup -setusingnetworktime on
    sudo systemsetup -setremotelogin -f on
