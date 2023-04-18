@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "This script will configure your Mac for all needed software and settings for show mode. Ensure you ran this as SUDO!"
+echo "This script will configure your Mac for all needed software and settings for show mode."
 read -p "Are you ready to proceed? [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Script will start in 5..."
@@ -52,13 +52,7 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   brew install --cask firefox
   brew install --cask iterm2
   brew install --cask microsoft-powerpoint
-  #brew install --cask istat-server
-  #brew install --cask microsoft-teams
-  #brew install --cask microsoft-outlook
-  #brew install --cask microsoft-excel
-  #brew install --cask microsoft-word
-  #brew install --cask microsoft-office
-  #brew install --cask discord
+  brew install --cask istat-server
   brew install --cask atom
   #brew install --cask sony-ps-remote-play
   #brew install --cask 1password
@@ -73,18 +67,25 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
 else
   echo "Skipping step"
 fi
-###--- SSYTEM SETTINGS ---###
+###--- FILE SHARING ---###
+read -p "Do you need file sharing between machines [yN?]?" REPLY
+if [[ "$REPLY" =~ ^[Yy]$  ]]; then
+  echo "Now changing system settings"
+  mkdir ~/ShowShare/
+  sharing -a ~/ShowShare/ -s 010 -e ShowShare -S ShowShare -g 010
+else
+  echo "Skipping step"
+fi
+###--- SYSTEM SETTINGS ---###
 read -p "Do you need to apply system settings [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
-   echo "Now changing system settings"
-   mkdir ~/ShowShare/
-   sharing -a ~/ShowShare/ -s 010 -e ShowShare -S ShowShare -g 010
-   pmset -a displaysleep 0
-   pmset -a disksleep 0
-   pmset -a sleep 0
-   pmset -a womp 1
-   pmset -a autorestart 1
-   pmset -a powerbutton 0
+   echo "Now changing system power settings"
+   sudo pmset -a displaysleep 0
+   sudo pmset -a disksleep 0
+   sudo pmset -a sleep 0
+   sudo pmset -a womp 1
+   sudo pmset -a autorestart 1
+   sudo pmset -a powerbutton 0
    systemsetup -setusingnetworktime on
    systemsetup -setcomputersleep never
    systemsetup -setdisplaysleep never
@@ -100,6 +101,18 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    killall Dock
    defaults write NSGlobalDomain _HIHideMenuBar -bool true
    killall Finder
+else
+  echo "Skipping step"
+fi
+read -p "Is this a personal machine [yN]?" REPLY
+if [[ "$REPLY" =~ ^[Yy]$  ]] then
+  echo "Installing additonal applications"
+  brew install --cask microsoft-teams
+  brew install --cask microsoft-outlook
+  brew install --cask microsoft-excel
+  brew install --cask microsoft-word
+  brew install --cask microsoft-office
+  brew install --cask discord
 else
   echo "Skipping step"
 fi
