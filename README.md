@@ -26,7 +26,7 @@ Installs all needed applications and dependencies and modifies system settings b
 
     ```sh
     curl https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.sh -o showmode.sh
-    chmod +x setup.sh
+    chmod +x showmode.sh
     ./setup.sh
     ```
 

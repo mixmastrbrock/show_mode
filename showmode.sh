@@ -2,16 +2,7 @@
 echo "This script will configure your Mac for all needed software and settings for show mode."
 read -p "Are you ready to proceed? [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
-   echo "Script will start in 5..."
-   sleep 1
-   echo "4..."
-   sleep 1
-   echo "3..."
-   sleep 1
-   echo "2..."
-   sleep 1
-   echo "1..."
-   sleep 1
+   echo "Let's begin!"
 else
   echo "Aborting installer"
   exit
@@ -105,7 +96,7 @@ else
   echo "Skipping step"
 fi
 read -p "Is this a personal machine [yN]?" REPLY
-if [[ "$REPLY" =~ ^[Yy]$  ]] then
+if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   echo "Installing additonal applications"
   brew install --cask microsoft-teams
   brew install --cask microsoft-outlook
