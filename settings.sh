@@ -1,4 +1,13 @@
 #!/bin/bash
+###--- WIFI ---###
+read -p "Do you want to add the video WiFi network [yN]?" REPLY
+if [["$REPLY" =~ ^[Yy]$ ]]; then
+  echo "Adding network..."
+  networksetup -addpreferredwirelessnetworkatindex en0 "HMXVideo2_AP" 0 WPA2 "harvestvideo"
+  networksetup -addpreferredwirelessnetworkatindex en0 "Lancelot" 0 WPA2 "cobalt42"
+else
+  echo "Skipping step"
+fi
 ###--- HOSTNAME ---###
 read -p "Enter the hostname you want to use: " new_name
 sudo scutil --set ComputerName "$new_name"
@@ -23,7 +32,9 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    osascript -e 'tell application "Finder" to set desktop picture to {class:"solid color", color:{0, 0, 0}}'
    osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
    osascript -e 'tell application "System Events" to tell notification preferences to set do not disturb to true'
+   defaults write com.apple.sound.beep.feedback -bool false
    defaults write "Apple Global Domain" com.apple.swipescrolldirection -bool true
+   sudo mdutil -a -i off
    sudo pmset -a sleep 0 disksleep 0 displaysleep 0 womp 1 autorestart 1 powerbutton 0
    sudo systemsetup -setusingnetworktime on
    sudo systemsetup -setremotelogin -f on
