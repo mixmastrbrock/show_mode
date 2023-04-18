@@ -8,7 +8,7 @@ else
   exit
 fi
 ###--- SCRIPT UPDATE ---###
-read -p "Do you want to check for the latest version of this script [yN?]? If this the first deployment, this is required." REPLY
+read -p "Do you want to check for the latest version of this script. If this the first deployment, this is required. [yN?]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   echo "Checking..."
   curl https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/wan.sh -o wan.sh
