@@ -35,7 +35,8 @@ read -p "Do you need to apply system settings [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Now changing system settings"
    # Change desktop background to black
-   osascript -e 'tell application "System Events" to tell desktops to set picture to {color:"0,0,0"}'
+   echo -n -e "\x89\x50\x4E\x47\x0D\x0A\x1A\x0A\x00\x00\x00\x0D\x49\x48\x44\x52\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1F\x15\xC4\x89\x00\x00\x00\x0D\x49\x44\x41\x54\x78\x9C\x63\x00\x01\x00\x01\x05\x00\x00\x00\x00\x1F\xA6\x45\x3D\x00\x00\x00\x00\x49\x45\x4E\x44\xAE\x42\x60\x82" > /tmp/black.png
+   osascript -e 'tell application "System Events" to tell desktops to set picture to "/tmp/black.png"'
    # Enable dark mode
    osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
    # Enable Do Not Distrub
