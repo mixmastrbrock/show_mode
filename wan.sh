@@ -1,6 +1,6 @@
 #!/bin/bash
 ###--- HOMEBREW INSTALL ---###
-read -p "Do you need to install Homebrew [yN]?" REPLY
+read -p "Install Homebrew [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Installing Homebrew"
    ./bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -8,7 +8,7 @@ else
   echo "Skipping step"
 fi
 ###--- APPLICATION LIST ---###
-read -p "Do you need to install applications [yN]?" REPLY
+read -p "Install applications [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   echo "Starting installtion of applications"
   brew install curl
@@ -46,7 +46,7 @@ else
   echo "Skipping step"
 fi
 ###--- SOFTWARE UPDATES ---###
-read -p "Do you want to check for software updates [yN]?" REPLY
+read -p "Check for software updates [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$ ]]; then
   softwareupdate -l
   softwareupdate -d
@@ -54,7 +54,7 @@ else
   echo "Skipping step"
 fi
 ###--- PERSONAL MACHINE ADDITIONS ---###
-read -p "Is this a personal machine [yN]?" REPLY
+read -p "Install personal applications [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   echo "Installing additonal applications"
   brew install --cask microsoft-teams

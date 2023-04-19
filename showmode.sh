@@ -25,4 +25,11 @@ fi
 ./wan.sh
 ./settings.sh
 clear
-echo "Script complete. That's it. Get to work."
+read -p "Do you want to restart? Recommended if you applied system settings. [yN]?" REPLY
+if [[ "$REPLY" =~ ^[Yy]$  ]]; then
+   echo "See you soon!"
+   sudo reboot now
+else
+  echo "That's it! Break a leg."
+  exit
+fi
