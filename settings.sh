@@ -10,7 +10,7 @@ else
 fi
 ###--- HOSTNAME ---###
 read -p "Do you want to change the hostname [yN]?" REPLY
-if [["$REPLY" =~ ^[Yy]$ ]]; then
+if [[ "$REPLY" =~ ^[Yy]$ ]]; then
   read -p "Enter the hostname you want to use: " new_name
   sudo scutil --set ComputerName "$new_name"
   sudo scutil --set HostName "$new_name"
