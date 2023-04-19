@@ -34,7 +34,7 @@ fi
 read -p "Do you need to apply system settings [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Now changing system settings"
-   osascript -e 'tell application "Finder" to set desktop picture to {class:"solid color", color:{0, 0, 0}}'
+   osascript -e 'tell application "System Events" to tell appearance preferences to set the picture of the first desktop to "/System/Library/CoreServices/DefaultDesktop.jpg"'
    osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
    osascript -e 'tell application "System Events" to tell notification preferences to set do not disturb to true'
    defaults write com.apple.sound.beep.feedback -bool false
@@ -42,10 +42,10 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    sudo mdutil -a -i off
    sudo pmset -a sleep 0 disksleep 0 displaysleep 0 womp 1 autorestart 1 powerbutton 0
    sudo systemsetup -setusingnetworktime on
-   sudo systemsetup -setremotelogin -f on
+   sudo systemsetup -setremotelogin on
    defaults write com.apple.dock tilesize -integer 16
    killall Dock
-   defaults write NSGlobalDomain _HIHideMenuBar -bool true
+   defaults write NSGlobalDomain _HIHideMenuBar -bool false
    killall Finder
    softwareupdate --schedule off
 else
