@@ -34,19 +34,33 @@ fi
 read -p "Do you need to apply system settings [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Now changing system settings"
-   osascript -e 'tell application "System Events" to tell appearance preferences to set the picture of the first desktop to "/System/Library/CoreServices/DefaultDesktop.jpg"'
+   # Change desktop background to black
+   osascript -e 'tell application "System Events" to tell desktops to set picture to {color:"0,0,0"}'
+   # Enable dark mode
    osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
+   # Enable Do Not Distrub
    osascript -e 'tell application "System Events" to tell notification preferences to set do not disturb to true'
+   # Disable audio level click
    defaults write com.apple.sound.beep.feedback -bool false
+   # Natural scrolling
    defaults write "Apple Global Domain" com.apple.swipescrolldirection -bool true
-   sudo mdutil -a -i off
+   # Disable Siri
+   sudo defaults write /Library/Preferences/com.apple.Siri "VoiceTriggerUserEnabled" -int 0
+   sudo launchctl unload -w /System/Library/LaunchAgents/com.apple.Siri.plist 2>/dev/null
+   sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.Siri.plist 2>/dev/null
+   # Power Settings
    sudo pmset -a sleep 0 disksleep 0 displaysleep 0 womp 1 autorestart 1 powerbutton 0
+   # Enable NTP
    sudo systemsetup -setusingnetworktime on
+   # Enable SSH
    sudo systemsetup -setremotelogin on
+   # Make Dock small
    defaults write com.apple.dock tilesize -integer 16
    killall Dock
+   # Hide menu bar
    defaults write NSGlobalDomain _HIHideMenuBar -bool false
    killall Finder
+   # Disable automatic software updates
    softwareupdate --schedule off
 else
   echo "Skipping step"
