@@ -1,11 +1,12 @@
 #!/bin/bash
 ###--- HOMEBREW INSTALL ---###
-read -p "Install Homebrew [yN]?" REPLY
+read -p "Have you installed Homebrew [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
-   echo "Installing Homebrew"
-   ./bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   echo "Continuing script..."
+#   ./bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 else
-  echo "Skipping step"
+  echo "Please install Hombrew (brew.sh) before continuing."
+  exit
 fi
 ###--- APPLICATION LIST ---###
 read -p "Install applications [yN]?" REPLY

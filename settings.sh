@@ -50,7 +50,7 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Deactivated audio feedback on level change."
    # Natural scrolling
    defaults write -g com.apple.swipescrolldirection -bool true
-   echo "Enabled Natural Scrolling, because what monster uses a trackpad with it off."
+   echo "Enabled Natural Scrolling"
    # Disable Siri
    sudo defaults write /Library/Preferences/com.apple.Siri "VoiceTriggerUserEnabled" -int 0
    sudo launchctl unload -w /System/Library/LaunchAgents/com.apple.Siri.plist 2>/dev/null
@@ -70,8 +70,9 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    sudo systemsetup -setremotelogin on
    echo "Enabled SSH."
    # Make Dock small
-   defaults write com.apple.dock tilesize -integer 16
+   defaults write com.apple.dock tilesize -integer 48
    killall Dock
+   # ---ADD LINE FOR SHOW DOCK---###
    echo "Changed Dock size."
    # Hide menu bar
    defaults write NSGlobalDomain _HIHideMenuBar -bool false
@@ -79,6 +80,7 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Hide Menu Bar."
    # Disable automatic software updates
    softwareupdate --schedule off
+   # ---ADD LINE FOR MISSION CONTROL---###
 else
   echo "Skipping step"
 fi
