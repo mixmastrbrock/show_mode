@@ -16,6 +16,7 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   brew install wget
   brew install ffmpeg
   brew install handbrake
+  brew install --cask cyberduck
   brew install --cask caffeine
   brew install --cask atemosc
   brew install youtube-dl
@@ -35,8 +36,8 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   brew install --cask firefox
   brew install --cask iterm2
   brew install --cask microsoft-powerpoint
-  brew install --cask istat-server
-  brew install --cask atom
+  #brew install --cask istat-server
+  #brew install --cask atom
   clear
   ###--- NON-SCRIPT APPLICATIONS ---###
   echo "Applications Installed. Two pages will open in your browser for additional downloads to be completed."
