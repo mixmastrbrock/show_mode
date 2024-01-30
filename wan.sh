@@ -38,6 +38,7 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   brew install --cask microsoft-powerpoint
   brew install --cask microsoft-excel
   brew install --cask microsoft-word
+  brew install --cask google-chrome
   #brew install --cask istat-server
   #brew install --cask atom
   clear
