@@ -36,6 +36,8 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   brew install --cask firefox
   brew install --cask iterm2
   brew install --cask microsoft-powerpoint
+  brew install --cask microsoft-excel
+  brew install --cask microsoft-word
   #brew install --cask istat-server
   #brew install --cask atom
   clear
@@ -61,8 +63,6 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   echo "Installing additonal applications"
   brew install --cask microsoft-teams
   brew install --cask microsoft-outlook
-  brew install --cask microsoft-excel
-  brew install --cask microsoft-word
   brew install --cask microsoft-office
   brew install --cask discord
   brew install --cask sony-ps-remote-play
