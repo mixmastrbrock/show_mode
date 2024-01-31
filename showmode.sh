@@ -24,8 +24,7 @@ if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
 fi
 ./wan.sh
 ./settings.sh
-clear
-read -p "Do you want to restart? Recommended if you applied system settings. [yN]?" REPLY
+read -p "Do you want to restart?[yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "See you soon!"
    sudo reboot now
