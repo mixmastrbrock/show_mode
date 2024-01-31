@@ -71,10 +71,10 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Enabled SSH."
    # Backup the current dock preferences
    defaults export com.apple.dock ~/Desktop/dock_backup.plist
-   # Make Dock small
-   defaults write com.apple.dock tilesize -integer 48
    # List of bundle identifiers of apps to remove from the dock
-   dockutil -r "/System/Applications/Messages.app" -r "/System/Applications/Mail.app" -r "/System/Applications/Maps.app" -r "/System/Applications/Photos.app" -r "/System/Applications/FaceTime.app" -r "/System/Applications/Contacts.app" -r "/System/Applications/TV.app" -r "/System/Applications/Music.app" -r "/System/Applications/News.app" -a "/Applications/ProPresenter.app" -a "/Applications/QLab.app" -a "/Applications/Microsoft PowerPoint.app" -a "/Applications/Google Chrome.app" -a "/Applications/Cyberduck.app"
+   dockutil -r "/System/Applications/Messages.app" -r "/System/Applications/Mail.app" -r "/System/Applications/Maps.app" -r "/System/Applications/Photos.app" -r "/System/Applications/FaceTime.app" -r "/System/Applications/Contacts.app" -r "/System/Applications/TV.app" -r "/System/Applications/Music.app" -r "/System/Applications/News.app" -a "/Applications/Google Chrome.app" -p 3 -a "/Applications/ProPresenter.app" -p 4 -a "/System/Applications/Keynote.app" -p 5 -a "/Applications/Microsoft PowerPoint.app" -p 6 -a "/Applications/QLab.app" -p 7 -a "/Applications/Cyberduck.app" -p 8
+   #Change Dock size
+   defaults write com.apple.dock tilesize -integer 48
    # Restart the dock to apply changes
    killall Dock
    # ---ADD LINE FOR SHOW DOCK---###
