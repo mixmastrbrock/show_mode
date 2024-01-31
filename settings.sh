@@ -74,7 +74,7 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    # Make Dock small
    defaults write com.apple.dock tilesize -integer 48
    # List of bundle identifiers of apps to remove from the dock
-   dockutil -r "/System/Applications/Messages.app" -r "/System/Applications/Mail.app" -r "/System/Applications/Maps.app" -r "/System/Applications/Photos.app" -r "/System/Applications/FaceTime.app" -r "/System/Applications/Contacts.app" -r "/System/Applications/TV.app" -r "/System/Applications/Music.app" -r "/System/Applications/News.app" -a "Applications/ProPresenter.app" -a "Applications/QLab.app" -a "Applications/Microsoft PowerPoint.app" -a "Applications/Google Chrome.app" -a "Applications/Cyberduck.app"
+   dockutil -r "/System/Applications/Messages.app" -r "/System/Applications/Mail.app" -r "/System/Applications/Maps.app" -r "/System/Applications/Photos.app" -r "/System/Applications/FaceTime.app" -r "/System/Applications/Contacts.app" -r "/System/Applications/TV.app" -r "/System/Applications/Music.app" -r "/System/Applications/News.app" -a "/Applications/ProPresenter.app" -a "/Applications/QLab.app" -a "/Applications/Microsoft PowerPoint.app" -a "/Applications/Google Chrome.app" -a "/Applications/Cyberduck.app"
    # Restart the dock to apply changes
    killall Dock
    # ---ADD LINE FOR SHOW DOCK---###
