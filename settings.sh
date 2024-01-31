@@ -74,26 +74,7 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    # Make Dock small
    defaults write com.apple.dock tilesize -integer 48
    # List of bundle identifiers of apps to remove from the dock
-   APPS_TO_REMOVE=(
-    "com.apple.iChat"
-    "com.apple.Mail"
-    "com.apple.Maps"
-    "com.apple.Photos"
-    "com.apple.FaceTime"
-    "com.apple.AddressBook"
-    "com.apple.TV"
-    "com.apple.Music"
-    "com.apple.news"
-   # Add more bundle identifiers here as needed
-   )
-   # Get the current dock contents
-   dock_contents=$(defaults read com.apple.dock persistent-apps)
-   # Loop through the list of apps and remove them from the dock contents
-   for bundle_id in "${APPS_TO_REMOVE[@]}"; do
-   dock_contents=$(echo "$dock_contents" | sed -e "s/{\"tile-data\" = {\"bundle-identifier\" = \"$bundle_id\";};}//g")
-   done
-   # Write the updated dock contents back to the preferences
-   defaults write com.apple.dock persistent-apps -array "$dock_contents"
+   dockutil -r "/System/Applications/Messages.app" -r "/System/Applications/Mail.app" -r "/System/Applications/Maps.app" -r "/System/Applications/Photos.app" -r "/System/Applications/FaceTime.app" -r "/System/Applications/Contacts.app" -r "/System/Applications/TV.app" -r "/System/Applications/Music.app" -r "/System/Applications/News.app" -a "Applications/ProPresenter.app" -a "Applications/QLab.app" -a "Applications/Microsoft PowerPoint.app" -a "Applications/Google Chrome.app" -a "Applications/Cyberduck.app"
    # Restart the dock to apply changes
    killall Dock
    # ---ADD LINE FOR SHOW DOCK---###
