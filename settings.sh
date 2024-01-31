@@ -71,6 +71,26 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Enabled SSH."
    # Make Dock small
    defaults write com.apple.dock tilesize -integer 48
+   # List of bundle identifiers of apps to remove from the dock
+   APPS_TO_REMOVE=(
+    "com.apple.iChat"
+    "com.apple.Mail"
+    "com.apple.Maps"
+    "com.apple.Photos"
+    "com.apple.FaceTime"
+    "com.apple.AddressBook"
+    "com.apple.TV"
+    "com.apple.Music"
+    "com.apple.news"
+   # Add more bundle identifiers here as needed
+   )
+   # Loop through the list of apps and remove them from the dock
+   for bundle_id in "${APPS_TO_REMOVE[@]}"; do
+    defaults delete com.apple.dock persistent-apps > /dev/null 2>&1
+    defaults delete com.apple.dock persistent-others > /dev/null 2>&1
+    defaults write com.apple.dock persistent-apps -array-add '{"tile-data"={"bundle-identifier"="'$bundle_id'";}; "tile-type"="file-tile";}'
+   done
+   # Restart the dock to apply changes
    killall Dock
    # ---ADD LINE FOR SHOW DOCK---###
    echo "Changed Dock size."
