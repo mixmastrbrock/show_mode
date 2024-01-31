@@ -86,10 +86,14 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
     "com.apple.news"
    # Add more bundle identifiers here as needed
    )
-   # Loop through the list of apps and remove them from the dock
+   # Get the current dock contents
+   dock_contents=$(defaults read com.apple.dock persistent-apps)
+   # Loop through the list of apps and remove them from the dock contents
    for bundle_id in "${APPS_TO_REMOVE[@]}"; do
-       defaults write com.apple.dock persistent-apps -array-remove '{tile-data = { "bundle-identifier" = "'$bundle_id'"; };}'
+   dock_contents=$(echo "$dock_contents" | sed -e "s/{\"tile-data\" = {\"bundle-identifier\" = \"$bundle_id\";};}//g")
    done
+   # Write the updated dock contents back to the preferences
+   defaults write com.apple.dock persistent-apps -array "$dock_contents"
    # Restart the dock to apply changes
    killall Dock
    # ---ADD LINE FOR SHOW DOCK---###
