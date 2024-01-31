@@ -69,6 +69,8 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    # Enable SSH
    sudo systemsetup -setremotelogin on
    echo "Enabled SSH."
+   # Backup the current dock preferences
+   defaults export com.apple.dock ~/Desktop/dock_backup.plist
    # Make Dock small
    defaults write com.apple.dock tilesize -integer 48
    # List of bundle identifiers of apps to remove from the dock
@@ -86,9 +88,7 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    )
    # Loop through the list of apps and remove them from the dock
    for bundle_id in "${APPS_TO_REMOVE[@]}"; do
-    defaults delete com.apple.dock persistent-apps > /dev/null 2>&1
-    defaults delete com.apple.dock persistent-others > /dev/null 2>&1
-    defaults write com.apple.dock persistent-apps -array-add '{"tile-data"={"bundle-identifier"="'$bundle_id'";}; "tile-type"="file-tile";}'
+       defaults write com.apple.dock persistent-apps -array-remove '{tile-data = { "bundle-identifier" = "'$bundle_id'"; };}'
    done
    # Restart the dock to apply changes
    killall Dock
