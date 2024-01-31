@@ -72,7 +72,19 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    # Backup the current dock preferences
    defaults export com.apple.dock ~/Desktop/dock_backup.plist
    # List of bundle identifiers of apps to remove from the dock
-   dockutil -r "/System/Applications/Messages.app" -r "/System/Applications/Mail.app" -r "/System/Applications/Maps.app" -r "/System/Applications/Photos.app" -r "/System/Applications/FaceTime.app" -r "/System/Applications/Contacts.app" -r "/System/Applications/TV.app" -r "/System/Applications/Music.app" -r "/System/Applications/News.app" -a "/Applications/Google Chrome.app" -p 3 -a "/Applications/ProPresenter.app" -p 4 -a "/System/Applications/Keynote.app" -p 5 -a "/Applications/Microsoft PowerPoint.app" -p 6 -a "/Applications/QLab.app" -p 7 -a "/Applications/Cyberduck.app" -p 8
+   dockutil -r "/System/Applications/Messages.app" -r "/System/Applications/Mail.app" -r "/System/Applications/Maps.app" -r "/System/Applications/Photos.app" -r "/System/Applications/FaceTime.app" -r "/System/Applications/Contacts.app" -r "/System/Applications/TV.app" -r "/System/Applications/Music.app" -r "/System/Applications/News.app" --no-restart
+   dockutil -a "/Applications/Google Chrome.app" --label Chrome --no-restart
+   dockutil -a "/Applications/ProPresenter.app" --label ProPresenter --no-restart
+   dockutil -a "/Applications/Keynote.app" --label Keynote --no-restart
+   dockutil -a "/Applications/Microsoft PowerPoint.app" --label PowerPoint --no-restart
+   dockutil -a "/Applications/QLab.app" --label QLab --no-restart
+   dockutil -a "/Applications/Cyberduck.app" --label Cyberduck --no-restart
+   dockutil -m Chrome -p 3 --no-restart
+   dockutil -m ProPresenter -p 4 --no-restart
+   dockutil -m Keynote -p 5 --no-restart
+   dockutil -m PowerPoint -p 6 --no-restart
+   dockutil -m QLab -p 7 --no-restart
+   dockutil -m Cyberduck -p 8
    #Change Dock size
    defaults write com.apple.dock tilesize -integer 48
    # Restart the dock to apply changes
