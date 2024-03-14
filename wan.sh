@@ -40,6 +40,7 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   brew install --cask microsoft-word
   brew install --cask google-chrome
   brew install dockutil
+  brew install --cash wifiman
   #brew install --cask istat-server
   #brew install --cask atom
   clear
