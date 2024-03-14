@@ -50,7 +50,11 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Deactivated audio feedback on level change."
    # Natural scrolling
    defaults write -g com.apple.swipescrolldirection -bool true
-   echo "Enabled Natural Scrolling"
+   echo "Enabled Natural Scrolling."
+   defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
+   echo "Enabled Two-Finger Right Click."
+   # defaults write com.apple.driver.AppleHIDMouse Button2 -int 2
+   # echo "Enabled Bottom-Right Click."
    # Disable Siri
    sudo defaults write /Library/Preferences/com.apple.Siri "VoiceTriggerUserEnabled" -int 0
    sudo launchctl unload -w /System/Library/LaunchAgents/com.apple.Siri.plist 2>/dev/null
@@ -69,6 +73,12 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    # Enable SSH
    sudo systemsetup -setremotelogin on
    echo "Enabled SSH."
+   # Enable Remote Management
+   sudo defaults write /Library/Preferences/com.apple.RemoteManagement.plist VNCAlwaysStartOnConsole -bool true
+   sudo defaults write /Library/Preferences/com.apple.RemoteManagement.plist ManagementADVCOptions -dict-add AppleVNCServerLoadPolicy -int 3
+   sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -restart -agent -privs -all -allowAccessFor -allUsers
+   sudo sysadminctl -addUser hmx-admin -password HMXLive24! -admin
+   echo "Enabled Remote Management"
    # Backup the current dock preferences
    defaults export com.apple.dock ~/Desktop/dock_backup.plist
    # List of bundle identifiers of apps to remove from the dock
@@ -87,9 +97,9 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    dockutil -m Cyberduck -p 8
    #Change Dock size
    defaults write com.apple.dock tilesize -integer 48
+   defaults write com.apple.dock autohide -bool false
    # Restart the dock to apply changes
    killall Dock
-   # ---ADD LINE FOR SHOW DOCK---###
    echo "Changed Dock size."
    # Hide menu bar
    defaults write NSGlobalDomain _HIHideMenuBar -bool false
@@ -97,7 +107,16 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Hide Menu Bar."
    # Disable automatic software updates
    softwareupdate --schedule off
-   # ---ADD LINE FOR MISSION CONTROL---###
+   # Disable multiple Spaces in Mission Control
+   sudo defaults write com.apple.spaces spans-displays -bool false
+   echo "Disabled Spaces for external displays."
+else
+  echo "Skipping step"
+fi
+read -p "Setup startup script [yN]?" REPLY
+if [[ "$REPLY" =~ ^[Yy]$  ]]; then
+    mv showmode.plist ~/Library/LaunchAgents/
+    launchctl load ~/Library/LaunchAgents/showmode.plist
 else
   echo "Skipping step"
 fi
