@@ -11,6 +11,7 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    fi
   echo "Run this again!"
   exit
+  exit
 else
   echo "Skipping update"
 fi
