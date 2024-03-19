@@ -9,8 +9,7 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
      curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
      chmod +x "$SCRIPT_PATH"
    fi
-  echo "Run this again!"
-  exit
+  echo "New main script loaded"
   exit
 else
   echo "Skipping update"
