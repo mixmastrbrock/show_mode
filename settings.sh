@@ -73,12 +73,33 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    # Enable SSH
    sudo systemsetup -setremotelogin on
    echo "Enabled SSH."
+   # Hide menu bar
+   defaults write NSGlobalDomain _HIHideMenuBar -bool false
+   killall Finder
+   echo "Hide Menu Bar."
+   # Disable automatic software updates
+   softwareupdate --schedule off
+   # Disable multiple Spaces in Mission Control
+   sudo defaults write com.apple.spaces spans-displays -bool false
+   echo "Disabled Spaces for external displays."
+ else
+   echo "Skipping step"
+ fi
+ read -p "Enable remote desktop (Run only once) [yN]?" REPLY
+ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
+    echo "Now enabling remote desktop"
    # Enable Remote Management
    sudo defaults write /Library/Preferences/com.apple.RemoteManagement.plist VNCAlwaysStartOnConsole -bool true
    sudo defaults write /Library/Preferences/com.apple.RemoteManagement.plist ManagementADVCOptions -dict-add AppleVNCServerLoadPolicy -int 3
    sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -restart -agent -privs -all -allowAccessFor -allUsers
    sudo sysadminctl -addUser hmx-admin -password HMXLive24! -admin
-   echo "Enabled Remote Management"
+   echo "Enabled Remote Desktop"
+else
+  echo "Skipping step"
+fi
+read -p "Configure dock [yN]?" REPLY
+if [[ "$REPLY" =~ ^[Yy]$  ]]; then
+   echo "Now configuring dock"
    # Backup the current dock preferences
    defaults export com.apple.dock ~/Desktop/dock_backup.plist
    # List of bundle identifiers of apps to remove from the dock
@@ -101,15 +122,6 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    # Restart the dock to apply changes
    killall Dock
    echo "Changed Dock size."
-   # Hide menu bar
-   defaults write NSGlobalDomain _HIHideMenuBar -bool false
-   killall Finder
-   echo "Hide Menu Bar."
-   # Disable automatic software updates
-   softwareupdate --schedule off
-   # Disable multiple Spaces in Mission Control
-   sudo defaults write com.apple.spaces spans-displays -bool false
-   echo "Disabled Spaces for external displays."
 else
   echo "Skipping step"
 fi
