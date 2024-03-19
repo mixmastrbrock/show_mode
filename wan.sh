@@ -26,7 +26,6 @@ fi
 read -p "Install applications [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   echo "Starting installtion of applications"
-  brew install curl
   brew install wget
   brew install ffmpeg
   brew install handbrake
