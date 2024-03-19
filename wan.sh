@@ -1,5 +1,19 @@
 #!/bin/bash
 ###--- HOMEBREW INSTALL ---###
+read -p "Update main script [yN]?" REPLY
+if [[ "$REPLY" =~ ^[Yy]$  ]]; then
+   echo "Let's begin!"
+   SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.sh"
+   SCRIPT_PATH="wan.sh"
+   if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
+     curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
+     chmod +x "$SCRIPT_PATH"
+   fi
+  echo "Run this again!"
+  exit
+else
+  echo "Skipping update"
+fi
 read -p "Have you installed Homebrew [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Continuing script..."
