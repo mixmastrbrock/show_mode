@@ -13,3 +13,5 @@ defaults write -g com.apple.swipescrolldirection -bool true
 echo "Enabled Natural Scrolling."
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
 echo "Enabled Two-Finger Right Click."
+softwareupdate -l
+softwareupdate -d
