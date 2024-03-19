@@ -26,18 +26,17 @@ fi
 read -p "Install applications [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   echo "Starting installtion of applications"
+  brew install --cask iterm2
+  brew install dockutil
   brew install wget
   brew install ffmpeg
   brew install handbrake
+  brew install --cask google-chrome
+  brew install --cask handbrake
   brew install --cask cyberduck
   brew install --cask caffeine
-  brew install --cask atemosc
-  brew install youtube-dl
   brew install --cask elgato-stream-deck
   brew install --cask vlc
-  brew install --cask daisydisk
-  brew install --cask istat-menus
-  brew install rsync
   brew install --cask obs
   brew install --cask qlab
   brew install --cask propresenter
@@ -45,21 +44,19 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   brew install mediaconch
   brew install --cask zoom
   brew install --cask 4k-video-downloader
-  brew install --cask chromium
   brew install --cask firefox
-  brew install --cask iterm2
   brew install --cask microsoft-powerpoint
   brew install --cask microsoft-excel
   brew install --cask microsoft-word
-  brew install --cask google-chrome
-  brew install dockutil
   brew install --cash wifiman
+  #brew install --cask daisydisk
   #brew install --cask istat-server
   #brew install --cask atom
+  #brew install --cask istat-menus
   clear
   ###--- NON-SCRIPT APPLICATIONS ---###
   echo "Applications Installed. Two pages will open in your browser for additional downloads to be completed."
-  sleep 5
+  sleep 2
   open https://www.blackmagicdesign.com/support/
   open https://bitfocus.io
 else
