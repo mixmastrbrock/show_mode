@@ -1,10 +1,4 @@
 #!/bin/bash
-read -p "Did you just update the main script [yN]?" REPLY
-if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-  exit
-else
-  echo "Resuming setup"
-fi
 ###--- WIFI ---###
 read -p "Add common video WiFi networks [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$ ]]; then
