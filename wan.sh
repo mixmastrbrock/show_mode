@@ -1,6 +1,6 @@
 #!/bin/bash
 ###--- HOMEBREW INSTALL ---###
-read -p "Update main script [yN]?" REPLY
+read -p "Update main script (Only recommneded if running older install) [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$  ]]; then
    echo "Let's begin!"
    SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.sh"
@@ -10,7 +10,6 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
      chmod +x "$SCRIPT_PATH"
    fi
   echo "New main script loaded"
-  exit
 else
   echo "Skipping update"
 fi

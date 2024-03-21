@@ -21,16 +21,8 @@ if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
   curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
   chmod +x "$SCRIPT_PATH"
 fi
-###--- CRON UPDATE ---###
 SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/settings_cron.sh"
 SCRIPT_PATH="settings_cron.sh"
-if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
-    curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
-    chmod +x "$SCRIPT_PATH"
-fi
-###--- PLIST UPDATE ---###
-SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.plist"
-SCRIPT_PATH="showmode.plist"
 if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
     curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
     chmod +x "$SCRIPT_PATH"
