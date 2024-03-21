@@ -143,6 +143,8 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
   fi
     mv showmode.plist ~/Library/LaunchAgents/
     launchctl load ~/Library/LaunchAgents/showmode.plist
+    cron_command="0 0 1 * * ~/settings_cron.sh"
+    echo "$cron_command" | crontab -
 else
   echo "Skipping step"
 fi
