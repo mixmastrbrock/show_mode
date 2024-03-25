@@ -21,6 +21,10 @@ while true; do
               chmod +x "$SCRIPT_PATH"
             fi
             rm -f wan.sh
+            rm -f refresh.sh
+            rm -f settings.sh
+            rm -f settings_cron.sh
+            rm -f showmode.plist
             echo "Exiting. Run again for updated version."
             exit 0
             ;;
@@ -384,7 +388,7 @@ while true; do
                 curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
                 chmod +x "$SCRIPT_PATH"
             fi
-              mv showmode.plist ~/Library/LaunchAgents/
+              mv -f showmode.plist ~/Library/LaunchAgents/
               launchctl load ~/Library/LaunchAgents/showmode.plist
               cron_command="0 0 1 * * ~/settings_cron.sh"
               echo "$cron_command" | crontab -
@@ -401,11 +405,3 @@ while true; do
     esac
   done
 done
-read -p "Do you want to restart?[yN]?" REPLY
-if [[ "$REPLY" =~ ^[Yy]$  ]]; then
-   echo "See you soon!"
-   sudo reboot now
-else
-  echo "That's it! Break a leg."
-  exit
-fi

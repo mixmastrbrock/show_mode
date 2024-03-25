@@ -22,6 +22,7 @@ echo "Enabled Two-Finger Right Click."
 brew upgrade
 softwareupdate -l
 softwareupdate -d
+rm -f settings_cron.sh
 ###--- CRON UPDATE ---###
 SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode_cron.sh"
 SCRIPT_PATH="showmode_cron.sh"
