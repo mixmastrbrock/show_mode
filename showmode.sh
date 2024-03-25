@@ -1,16 +1,6 @@
 #!/bin/bash
 echo "This script will configure your Mac for all needed software and settings for show mode."
-read -p "Are you ready to proceed? [yN]?" REPLY
-if [[ "$REPLY" =~ ^[Yy]$  ]]; then
-   echo "Let's begin!"
-else
-  echo "Aborting installer"
-  exit
-fi
-# Define the list of options
 options=("Update" "First Time Install" "Refresh Existing Install" "Install Startup Script" "Quit")
-
-# Display the menu and get user's choice
 while true; do
   select choice in "${options[@]}"; do
     case $choice in
@@ -52,7 +42,7 @@ while true; do
               curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
               chmod +x "$SCRIPT_PATH"
             fi
-            echo "Exiting to refresh scripts..."
+            echo "Exiting. Run again for updated version."
             exit 0
             ;;
         "First Time Install")

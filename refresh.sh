@@ -1,6 +1,8 @@
 #!/bin/bash
 brew upgrade
 ###--- APPLICATION LIST ---###
+read -p "Check for new applications [yN]?" REPLY
+if [[ "$REPLY" =~ ^[Yy]$ ]]; then
   echo "Checking for new applications..."
   brew install --cask iterm2
   brew install dockutil
@@ -24,11 +26,14 @@ brew upgrade
   brew install --cask microsoft-powerpoint
   brew install --cask microsoft-excel
   brew install --cask microsoft-word
-  brew install --cash wifiman
+  brew install --cask wifiman
   #brew install --cask daisydisk
   #brew install --cask istat-server
   #brew install --cask atom
   #brew install --cask istat-menus
+else
+  echo "Skipping step"
+fi
 ###--- SOFTWARE UPDATES ---###
 read -p "Check for software updates [yN]?" REPLY
 if [[ "$REPLY" =~ ^[Yy]$ ]]; then
