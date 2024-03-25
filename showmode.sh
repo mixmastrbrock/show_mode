@@ -7,8 +7,8 @@ while true; do
         "Update")
             echo "Updating script"
             ###--- CRON UPDATE ---###
-            SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/settings_cron.sh"
-            SCRIPT_PATH="settings_cron.sh"
+            SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode_cron.sh"
+            SCRIPT_PATH="showmode_cron.sh"
             if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
                 curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
                 chmod +x "$SCRIPT_PATH"
@@ -20,6 +20,7 @@ while true; do
               curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
               chmod +x "$SCRIPT_PATH"
             fi
+            rm -f wan.sh
             echo "Exiting. Run again for updated version."
             exit 0
             ;;
@@ -370,8 +371,8 @@ while true; do
         "Install Startup Script")
             echo "Installing startup script..."
             ###--- CRON UPDATE ---###
-            SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/settings_cron.sh"
-            SCRIPT_PATH="settings_cron.sh"
+            SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode_cron.sh"
+            SCRIPT_PATH="showmode_cron.sh"
             if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
                 curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
                 chmod +x "$SCRIPT_PATH"

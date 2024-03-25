@@ -6,7 +6,7 @@
     <string>com.hmx.showmode</string>
     <key>ProgramArguments</key>
     <array>
-      <string>~/settings_cron.sh</string>
+      <string>~/showmode_cron.sh</string>
     </array>
     <key>RunAtLoad</key>
     <true/>
