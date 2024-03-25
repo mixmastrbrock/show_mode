@@ -125,26 +125,3 @@ if [[ "$REPLY" =~ ^[Yy]$  ]]; then
 else
   echo "Skipping step"
 fi
-read -p "Setup startup script [yN]?" REPLY
-if [[ "$REPLY" =~ ^[Yy]$  ]]; then
-  ###--- CRON UPDATE ---###
-  SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/settings_cron.sh"
-  SCRIPT_PATH="settings_cron.sh"
-  if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
-      curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
-      chmod +x "$SCRIPT_PATH"
-  fi
-  ###--- PLIST UPDATE ---###
-  SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.plist"
-  SCRIPT_PATH="showmode.plist"
-  if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
-      curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
-      chmod +x "$SCRIPT_PATH"
-  fi
-    mv showmode.plist ~/Library/LaunchAgents/
-    launchctl load ~/Library/LaunchAgents/showmode.plist
-    cron_command="0 0 1 * * ~/settings_cron.sh"
-    echo "$cron_command" | crontab -
-else
-  echo "Skipping step"
-fi
