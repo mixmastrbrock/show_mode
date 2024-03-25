@@ -12,13 +12,6 @@ if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
   curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
   chmod +x "$SCRIPT_PATH"
 fi
-###--- PLIST UPDATE ---###
-SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.plist"
-SCRIPT_PATH="showmode.plist"
-if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
-    curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
-    chmod +x "$SCRIPT_PATH"
-fi
 SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.sh"
 SCRIPT_PATH="showmode.sh"
 if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then

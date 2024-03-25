@@ -37,6 +37,14 @@ while true; do
                 curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
                 chmod +x "$SCRIPT_PATH"
             fi
+            ###--- REFRESH UPDATE---###
+            echo "Refreshing Existing Install..."
+            SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/refresh.sh"
+            SCRIPT_PATH="refresh.sh"
+            if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
+              curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
+              chmod +x "$SCRIPT_PATH"
+            fi
             ###--- SHOWMODE UPDATE ---###
             SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.sh"
             SCRIPT_PATH="showmode.sh"
@@ -50,12 +58,33 @@ while true; do
         "First Time Install")
             echo "First Time Install Running..."
             # Add your code to execute for Option 2
+            ###--- WAN UPDATE ---###
+            SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/wan.sh"
+            SCRIPT_PATH="wan.sh"
+            if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
+              curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
+              chmod +x "$SCRIPT_PATH"
+            fi
+            ###--- SETTINGS UPDATE ---###
+            SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/settings.sh"
+            SCRIPT_PATH="settings.sh"
+            if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
+              curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
+              chmod +x "$SCRIPT_PATH"
+            fi
             ./wan.sh
             ./settings.sh
             continue 2
             ;;
         "Refresh Existing Install")
+            ###--- REFRESH UPDATE---###
             echo "Refreshing Existing Install..."
+            SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/refresh.sh"
+            SCRIPT_PATH="refresh.sh"
+            if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
+              curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
+              chmod +x "$SCRIPT_PATH"
+            fi
             ./refresh.sh
             continue 2
             ;;
