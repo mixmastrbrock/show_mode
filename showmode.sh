@@ -1,5 +1,18 @@
 #!/bin/bash
 echo "This script will configure your Mac for all needed software and settings for show mode."
+###--- CRON UPDATE ---###
+SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/HMX-Play.png"
+SCRIPT_PATH="HMX-Play.png"
+if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
+    curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
+    chmod +x "$SCRIPT_PATH"
+fi
+SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/Showmode-BG.png"
+SCRIPT_PATH="Showmode-BG.png"
+if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
+    curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
+    chmod +x "$SCRIPT_PATH"
+fi
 options=("Update" "First Time Install" "Refresh Existing Install" "Install Startup Script" "Quit")
 while true; do
   select choice in "${options[@]}"; do
@@ -240,33 +253,15 @@ while true; do
             read -p "Check for new applications [yN]?" REPLY
             if [[ "$REPLY" =~ ^[Yy]$ ]]; then
               echo "Checking for new applications..."
-              brew install --cask iterm2
               brew install dockutil
               brew install wget
-              brew install ffmpeg
-              brew install handbrake
-              brew install --cask google-chrome
               brew install --cask handbrake
               brew install --cask cyberduck
               brew install --cask caffeine
-              brew install --cask elgato-stream-deck
               brew install --cask vlc
-              brew install --cask obs
-              brew install --cask qlab
-              brew install --cask propresenter
-              brew install --cask atext
-              brew install mediaconch
-              brew install --cask zoom
-              brew install --cask 4k-video-downloader
-              brew install --cask firefox
-              brew install --cask microsoft-powerpoint
               brew install --cask microsoft-excel
               brew install --cask microsoft-word
               brew install --cask wifiman
-              #brew install --cask daisydisk
-              #brew install --cask istat-server
-              #brew install --cask atom
-              #brew install --cask istat-menus
             else
               echo "Skipping step"
             fi
@@ -292,10 +287,6 @@ while true; do
             read -p "Apply system settings [yN]?" REPLY
             if [[ "$REPLY" =~ ^[Yy]$  ]]; then
                echo "Now changing system settings"
-               # Change desktop background to black
-               #echo -n -e "\x89\x50\x4E\x47\x0D\x0A\x1A\x0A\x00\x00\x00\x0D\x49\x48\x44\x52\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1F\x15\xC4\x89\x00\x00\x00\x0D\x49\x44\x41\x54\x78\x9C\x63\x00\x01\x00\x01\x05\x00\x00\x00\x00\x1F\xA6\x45\x3D\x00\x00\x00\x00\x49\x45\x4E\x44\xAE\x42\x60\x82" > /tmp/black.png
-               #osascript -e 'tell application "System Events" to tell desktops to set picture to "/tmp/black.png"'
-               #echo "Desktop background set to black."
                # Enable dark mode
                osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
                echo "Dark Mode enabled."
