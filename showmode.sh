@@ -4,6 +4,7 @@ echo "This script will configure your Mac for all needed software and settings f
 while true; do
   PS3="Select an option:"
   options=("Update" "First Time Install" "Refresh Existing Install" "Install Startup Script" "Set desktop background" "Quit")
+  while true; do
   select choice in "${options[@]}"; do
     case $choice in
         "Update")
@@ -448,4 +449,5 @@ while true; do
             ;;
     esac
   done
+done
 done
