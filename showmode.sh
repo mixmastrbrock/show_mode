@@ -420,13 +420,13 @@ while true; do
         unzip showmode.workflow.zip
         rm -f showmode.workflow.zip
         automator -i "showmode-BG.png" ~/showmode.workflow
-#        "Quit")
-#          exit 0
-#          ;;
+        ;;
+        "Quit")
+          exit 0
+          ;;
         *)
             echo "Invalid option. Please try again."
             ;;
     esac
   done
-done
 done
