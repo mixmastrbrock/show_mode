@@ -4,7 +4,6 @@ echo "This script will configure your Mac for all needed software and settings f
 while true; do
   PS3="Select an option:"
   options=("Update" "First Time Install" "Refresh Existing Install" "Install Startup Script" "Set desktop background" "Quit")
-  while true; do
   select choice in "${options[@]}"; do
     case $choice in
         "Update")
@@ -412,35 +411,15 @@ while true; do
             curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
             chmod +x "$SCRIPT_PATH"
         fi
-        SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.workflow"
+        SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.workflow.zip"
         SCRIPT_PATH="showmode.workflow"
         if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
             curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
             chmod +x "$SCRIPT_PATH"
         fi
-          PS3="Select one of the following styles:"
-          bg_options=("HMX" "Black" "Return to main menu")
-            select bg_choice in "${bg_options[@]}"; do
-              case $bg_choice in
-                "HMX")
-                echo "Setting HMX Logo"
-                automator -i "showmode-BG.png" ~/showmode.workflow
-                break
-                ;;
-                "Black")
-                echo "Setting Black"
-                automator -i "black.png" ~/showmode.workflow
-                break
-                ;;
-                "Return to main menu")
-                break
-                ;;
-                *)
-                echo "Invalid option. Please try again."
-                ;;
-              esac
-            done
-            ;;
+        unzip showmode.workflow.zip
+        rm -f showmode.workflow.zip
+        automator -i "showmode-BG.png" ~/showmode.workflow
         "Quit")
         exit 0
         ;;
@@ -449,5 +428,4 @@ while true; do
             ;;
     esac
   done
-done
 done
