@@ -219,6 +219,9 @@ while true; do
                sudo defaults write /Library/Preferences/com.apple.RemoteManagement.plist ManagementADVCOptions -dict-add AppleVNCServerLoadPolicy -int 3
                sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -restart -agent -privs -all -allowAccessFor -allUsers
                sudo sysadminctl -addUser hmx-admin -password HMXLive24! -admin
+               sudo cp ~/HMX-Play.png /Library/User\ Pictures/
+               sudo dscl . delete /Users/hmx-admin JPEGPhoto
+               sudo dscl . create /Users/hmx-admin Picture "/Library/User Pictures/HMX-Play.png"
                echo "Enabled Remote Desktop"
             else
               echo "Skipping step"
