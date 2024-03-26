@@ -440,6 +440,9 @@ while true; do
               esac
             done
             ;;
+        "Quit")
+        exit 0
+        ;;
         *)
             echo "Invalid option. Please try again."
             ;;
