@@ -1,8 +1,9 @@
 #!/bin/bash
 echo "This script will configure your Mac for all needed software and settings for show mode."
 ###--- CRON UPDATE ---###
-options=("Update" "First Time Install" "Refresh Existing Install" "Install Startup Script" "Set desktop background" "Quit")
 while true; do
+  PS3="Select an option:"
+  options=("Update" "First Time Install" "Refresh Existing Install" "Install Startup Script" "Set desktop background" "Quit")
   select choice in "${options[@]}"; do
     case $choice in
         "Update")
@@ -416,6 +417,7 @@ while true; do
             curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
             chmod +x "$SCRIPT_PATH"
         fi
+          PS3="Select one of the following styles:"
           bg_options=("HMX" "Black" "Return to main menu")
             select bg_choice in "${bg_options[@]}"; do
               case $bg_choice in
