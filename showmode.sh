@@ -416,9 +416,9 @@ while true; do
             curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
             chmod +x "$SCRIPT_PATH"
         fi
-          options=("HMX" "Black")
-            select choice in "${options[@]}"; do
-              case $choice in
+          bg_options=("HMX" "Black")
+            select bg_choice in "${bg_options[@]}"; do
+              case $bg_choice in
                 "HMX")
                 echo "Setting HMX Logo"
                 automator -i "showmode-BG.png" ~/showmode.workflow
@@ -434,4 +434,5 @@ while true; do
             ;;
     esac
   done
+  ;;
 done
