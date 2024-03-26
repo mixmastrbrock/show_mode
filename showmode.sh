@@ -1,25 +1,7 @@
 #!/bin/bash
 echo "This script will configure your Mac for all needed software and settings for show mode."
 ###--- CRON UPDATE ---###
-SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/HMX-Play.png"
-SCRIPT_PATH="HMX-Play.png"
-if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
-    curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
-    chmod +x "$SCRIPT_PATH"
-fi
-SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/Showmode-BG.png"
-SCRIPT_PATH="Showmode-BG.png"
-if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
-    curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
-    chmod +x "$SCRIPT_PATH"
-fi
-SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.workflow"
-SCRIPT_PATH="showmode.workflow"
-if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
-    curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
-    chmod +x "$SCRIPT_PATH"
-fi
-options=("Update" "First Time Install" "Refresh Existing Install" "Install Startup Script" "Quit")
+options=("Update" "First Time Install" "Refresh Existing Install" "Install Startup Script" "Set desktop background" "Quit")
 while true; do
   select choice in "${options[@]}"; do
     case $choice in
@@ -59,7 +41,6 @@ while true; do
               echo "Please install Hombrew (https://brew.sh) before continuing."
               exit
             fi
-            automator -i "showmode-BG.png" ~/showmode.workflow
             ###--- APPLICATION LIST ---###
             read -p "Install applications [yN]?" REPLY
             if [[ "$REPLY" =~ ^[Yy]$  ]]; then
@@ -109,21 +90,21 @@ while true; do
               echo "Skipping step"
             fi
             ###--- PERSONAL MACHINE ADDITIONS ---###
-            read -p "Install personal applications [yN]?" REPLY
-            if [[ "$REPLY" =~ ^[Yy]$  ]]; then
-              echo "Installing additonal applications"
-              brew install --cask microsoft-teams
-              brew install --cask microsoft-outlook
-              brew install --cask microsoft-office
-              brew install --cask discord
-              brew install --cask sony-ps-remote-play
-              brew install --cask 1password
-              brew install --cask steam
-              brew install --cask dolphin
-              brew install --cask parsec
-            else
-              echo "Skipping step"
-            fi
+#            read -p "Install personal applications [yN]?" REPLY
+#            if [[ "$REPLY" =~ ^[Yy]$  ]]; then
+#              echo "Installing additonal applications"
+#              brew install --cask microsoft-teams
+#              brew install --cask microsoft-outlook
+#              brew install --cask microsoft-office
+#              brew install --cask discord
+#              brew install --cask sony-ps-remote-play
+#              brew install --cask 1password
+#              brew install --cask steam
+#              brew install --cask dolphin
+#              brew install --cask parsec
+#            else
+#              echo "Skipping step"
+#            fi
             ###--- WIFI ---###
             read -p "Add common video WiFi networks [yN]?" REPLY
             if [[ "$REPLY" =~ ^[Yy]$ ]]; then
@@ -160,10 +141,30 @@ while true; do
             read -p "Apply system settings [yN]?" REPLY
             if [[ "$REPLY" =~ ^[Yy]$  ]]; then
                echo "Now changing system settings"
-               # Change desktop background to black
-               #echo -n -e "\x89\x50\x4E\x47\x0D\x0A\x1A\x0A\x00\x00\x00\x0D\x49\x48\x44\x52\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1F\x15\xC4\x89\x00\x00\x00\x0D\x49\x44\x41\x54\x78\x9C\x63\x00\x01\x00\x01\x05\x00\x00\x00\x00\x1F\xA6\x45\x3D\x00\x00\x00\x00\x49\x45\x4E\x44\xAE\x42\x60\x82" > /tmp/black.png
-               #osascript -e 'tell application "System Events" to tell desktops to set picture to "/tmp/black.png"'
-               #echo "Desktop background set to black."
+               # Change desktop background to logo
+               SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/Showmode-BG.png"
+               SCRIPT_PATH="Showmode-BG.png"
+               if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
+                   curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
+                   chmod +x "$SCRIPT_PATH"
+               fi
+               SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.workflow"
+               SCRIPT_PATH="showmode.workflow"
+               if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
+                   curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
+                   chmod +x "$SCRIPT_PATH"
+               fi
+               automator -i "showmode-BG.png" ~/showmode.workflow
+               # Change User Icons
+               SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/HMX-Play.png"
+               SCRIPT_PATH="HMX-Play.png"
+               if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
+                   curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
+                   chmod +x "$SCRIPT_PATH"
+               fi
+               sudo cp ~/HMX-Play.png /Library/User\ Pictures/
+               sudo dscl . delete /Users/$(whoami) JPEGPhoto
+               sudo dscl . create /Users/$(whoami) Picture "/Library/User Pictures/HMX-Play.png"
                # Enable dark mode
                osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
                echo "Dark Mode enabled."
@@ -393,6 +394,30 @@ while true; do
               "Installed."
             continue 2
             ;;
+        "Set desktop background")
+        SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/Showmode-BG.png"
+        SCRIPT_PATH="Showmode-BG.png"
+        if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
+            curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
+            chmod +x "$SCRIPT_PATH"
+        fi
+        SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.workflow"
+        SCRIPT_PATH="showmode.workflow"
+        if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
+            curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
+            chmod +x "$SCRIPT_PATH"
+        fi
+          options=("HMX" "Black")
+            select choice in "${options[@]}"; do
+              case $choice in
+                "HMX")
+                automator -i "showmode-BG.png" ~/showmode.workflow
+                ;;
+                "Black")
+                automator -i "black.png" ~/showmode.workflow
+                ;;
+              esac
+            done
         "Quit")
             echo "Exiting..."
             exit 0
