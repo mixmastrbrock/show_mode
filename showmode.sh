@@ -143,26 +143,12 @@ while true; do
             if [[ "$REPLY" =~ ^[Yy]$  ]]; then
                echo "Now changing system settings"
                # Change desktop background to logo
-               SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/Showmode-BG.png"
-               SCRIPT_PATH="Showmode-BG.png"
-               if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
-                   curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
-                   chmod +x "$SCRIPT_PATH"
-               fi
-               SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.workflow"
-               SCRIPT_PATH="showmode.workflow"
-               if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
-                   curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
-                   chmod +x "$SCRIPT_PATH"
-               fi
+               wget -o -q https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.zip
+               unzip showmode.zip
                automator -i "showmode-BG.png" ~/showmode.workflow
+               rm -f showmode.zip
                # Change User Icons
-               SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/HMX-Play.png"
-               SCRIPT_PATH="HMX-Play.png"
-               if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
-                   curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
-                   chmod +x "$SCRIPT_PATH"
-               fi
+               wget -o -q https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/HMX-Play.png
                sudo mv ~/HMX-Play.png /Library/User\ Pictures/
                sudo dscl . delete /Users/$(whoami) JPEGPhoto
                sudo dscl . create /Users/$(whoami) Picture "/Library/User Pictures/HMX-Play.png"
@@ -220,12 +206,7 @@ while true; do
                sudo defaults write /Library/Preferences/com.apple.RemoteManagement.plist ManagementADVCOptions -dict-add AppleVNCServerLoadPolicy -int 3
                sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -restart -agent -privs -all -allowAccessFor -allUsers
                sudo sysadminctl -addUser hmx-admin -password HMXLive24! -admin
-               SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/HMX-Play.png"
-               SCRIPT_PATH="HMX-Play.png"
-               if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
-                   curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
-                   chmod +x "$SCRIPT_PATH"
-               fi
+               wget -o -q https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/HMX-Play.png
                sudo mv ~/HMX-Play.png /Library/User\ Pictures/
                sudo dscl . delete /Users/hmx-admin JPEGPhoto
                sudo dscl . create /Users/hmx-admin Picture "/Library/User Pictures/HMX-Play.png"
@@ -401,16 +382,10 @@ while true; do
               launchctl load ~/Library/LaunchAgents/showmode.plist
               cron_command="0 0 1 * * ~/settings_cron.sh"
               echo "$cron_command" | crontab -
-              "Installed."
+              echo "Installed."
             continue 2
             ;;
         "Set desktop background")
-        SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/Showmode-BG.png"
-        SCRIPT_PATH="Showmode-BG.png"
-        if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
-            curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
-            chmod +x "$SCRIPT_PATH"
-        fi
         wget -o -q https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.zip
         unzip showmode.zip
         automator -i "showmode-BG.png" ~/showmode.workflow
