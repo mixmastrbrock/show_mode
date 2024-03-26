@@ -418,8 +418,8 @@ while true; do
             chmod +x "$SCRIPT_PATH"
         fi
         unzip showmode.workflow.zip
-        rm -f showmode.workflow.zip
         automator -i "showmode-BG.png" ~/showmode.workflow
+        rm -f showmode.workflow.zip
         ;;
         "Quit")
           exit 0
