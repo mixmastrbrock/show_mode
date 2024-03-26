@@ -412,7 +412,7 @@ while true; do
             chmod +x "$SCRIPT_PATH"
         fi
         SCRIPT_URL="https://github.com/mixmastrbrock/show_mode/raw/main/showmode.workflow.zip"
-        SCRIPT_PATH="showmode.workflow"
+        SCRIPT_PATH="showmode.workflow.zip"
         if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
             curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
             chmod +x "$SCRIPT_PATH"
