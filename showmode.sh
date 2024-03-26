@@ -3,7 +3,7 @@ echo "This script will configure your Mac for all needed software and settings f
 ###--- CRON UPDATE ---###
 while true; do
   PS3="Select an option:"
-  options=("Update" "First Time Install" "Refresh Existing Install" "Install Startup Script" "Set desktop background" "Quit")
+  options=("Update" "First Time Install" "Refresh Existing Install" "Install Startup Script" "Set desktop background" "Enable Remote Desktop (Brock use only)" "Quit")
   select choice in "${options[@]}"; do
     case $choice in
         "Update")
@@ -390,6 +390,18 @@ while true; do
         unzip showmode.zip
         automator -i "showmode-BG.png" ~/showmode.workflow
         rm -f showmode.zip
+        ;;
+        "Enable Remote Desktop (Brock use only)")
+        sudo defaults write /Library/Preferences/com.apple.RemoteManagement.plist VNCAlwaysStartOnConsole -bool true
+        sudo defaults write /Library/Preferences/com.apple.RemoteManagement.plist ManagementADVCOptions -dict-add AppleVNCServerLoadPolicy -int 3
+        sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -restart -agent -privs -all -allowAccessFor -allUsers
+        sudo sysadminctl -addUser hmx-admin -password HMXLive24! -admin
+        wget -o -q https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/HMX-Play.png
+        sudo mv ~/HMX-Play.png /Library/User\ Pictures/
+        sudo dscl . delete /Users/hmx-admin JPEGPhoto
+        sudo dscl . create /Users/hmx-admin Picture "/Library/User Pictures/HMX-Play.png"
+        echo "Enabled Remote Desktop"
+        continue 2
         ;;
         "Quit")
           exit 0
