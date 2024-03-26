@@ -162,7 +162,7 @@ while true; do
                    curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
                    chmod +x "$SCRIPT_PATH"
                fi
-               sudo cp ~/HMX-Play.png /Library/User\ Pictures/
+               sudo mv ~/HMX-Play.png /Library/User\ Pictures/
                sudo dscl . delete /Users/$(whoami) JPEGPhoto
                sudo dscl . create /Users/$(whoami) Picture "/Library/User Pictures/HMX-Play.png"
                # Enable dark mode
@@ -219,7 +219,13 @@ while true; do
                sudo defaults write /Library/Preferences/com.apple.RemoteManagement.plist ManagementADVCOptions -dict-add AppleVNCServerLoadPolicy -int 3
                sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -restart -agent -privs -all -allowAccessFor -allUsers
                sudo sysadminctl -addUser hmx-admin -password HMXLive24! -admin
-               sudo cp ~/HMX-Play.png /Library/User\ Pictures/
+               SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/HMX-Play.png"
+               SCRIPT_PATH="HMX-Play.png"
+               if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
+                   curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
+                   chmod +x "$SCRIPT_PATH"
+               fi
+               sudo mv ~/HMX-Play.png /Library/User\ Pictures/
                sudo dscl . delete /Users/hmx-admin JPEGPhoto
                sudo dscl . create /Users/hmx-admin Picture "/Library/User Pictures/HMX-Play.png"
                echo "Enabled Remote Desktop"
@@ -414,17 +420,15 @@ while true; do
             select choice in "${options[@]}"; do
               case $choice in
                 "HMX")
+                echo "Setting HMX Logo"
                 automator -i "showmode-BG.png" ~/showmode.workflow
                 ;;
                 "Black")
+                echo "Setting Black"
                 automator -i "black.png" ~/showmode.workflow
                 ;;
               esac
             done
-        "Quit")
-            echo "Exiting..."
-            exit 0
-            ;;
         *)
             echo "Invalid option. Please try again."
             ;;
