@@ -417,7 +417,7 @@ while true; do
             curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
             chmod +x "$SCRIPT_PATH"
         fi
-        unzip showmode.zip
+        showmode.zip
         automator -i "showmode-BG.png" ~/showmode.workflow
         rm -f showmode.zip
         ;;
