@@ -13,6 +13,12 @@ if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
     curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
     chmod +x "$SCRIPT_PATH"
 fi
+SCRIPT_URL="https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.workflow"
+SCRIPT_PATH="showmode.workflow"
+if curl --silent --head --fail "$SCRIPT_URL" > /dev/null; then
+    curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
+    chmod +x "$SCRIPT_PATH"
+fi
 options=("Update" "First Time Install" "Refresh Existing Install" "Install Startup Script" "Quit")
 while true; do
   select choice in "${options[@]}"; do
@@ -53,6 +59,7 @@ while true; do
               echo "Please install Hombrew (https://brew.sh) before continuing."
               exit
             fi
+            automator -i "showmode-BG.png" ~/showmode.workflow
             ###--- APPLICATION LIST ---###
             read -p "Install applications [yN]?" REPLY
             if [[ "$REPLY" =~ ^[Yy]$  ]]; then
