@@ -416,16 +416,21 @@ while true; do
             curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
             chmod +x "$SCRIPT_PATH"
         fi
-          bg_options=("HMX" "Black")
+          bg_options=("HMX" "Black" "Return to main menu")
             select bg_choice in "${bg_options[@]}"; do
               case $bg_choice in
                 "HMX")
                 echo "Setting HMX Logo"
                 automator -i "showmode-BG.png" ~/showmode.workflow
+                break
                 ;;
                 "Black")
                 echo "Setting Black"
                 automator -i "black.png" ~/showmode.workflow
+                break
+                ;;
+                "Return to main menu")
+                break
                 ;;
                 *)
                 echo "Invalid option. Please try again."
