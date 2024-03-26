@@ -3,7 +3,7 @@ echo "This script will configure your Mac for all needed software and settings f
 ###--- CRON UPDATE ---###
 while true; do
   PS3="Select an option:"
-  options=("Update" "First Time Install" "Refresh Existing Install" "Install Startup Script" "Set desktop background")
+  options=("Update" "First Time Install" "Refresh Existing Install" "Install Startup Script" "Set desktop background" "Quit")
   select choice in "${options[@]}"; do
     case $choice in
         "Update")
