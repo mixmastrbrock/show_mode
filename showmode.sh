@@ -1,7 +1,6 @@
 #!/bin/bash
 echo "This script will configure your Mac for all needed software and settings for show mode."
 ###--- CRON UPDATE ---###
-while true; do
   PS3="Select an option:"
   options=("Update" "First Time Install" "Refresh Existing Install" "Install Startup Script" "Set desktop background" "Quit")
   select choice in "${options[@]}"; do
@@ -421,11 +420,10 @@ while true; do
         rm -f showmode.workflow.zip
         automator -i "showmode-BG.png" ~/showmode.workflow
         "Quit")
-        exit 0
-        ;;
+          exit 0
+          ;;
         *)
             echo "Invalid option. Please try again."
             ;;
     esac
-  done
 done
