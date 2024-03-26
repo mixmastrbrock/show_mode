@@ -427,12 +427,15 @@ while true; do
                 echo "Setting Black"
                 automator -i "black.png" ~/showmode.workflow
                 ;;
+                *)
+                echo "Invalid option. Please try again."
+                ;;
               esac
             done
+            ;;
         *)
             echo "Invalid option. Please try again."
             ;;
     esac
   done
-  ;;
 done
