@@ -411,7 +411,7 @@ while true; do
             curl --silent --output "$SCRIPT_PATH" "$SCRIPT_URL"
             chmod +x "$SCRIPT_PATH"
         fi
-        wget https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.zip
+        wget -o -q https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.zip
         unzip showmode.zip
         automator -i "showmode-BG.png" ~/showmode.workflow
         rm -f showmode.zip
