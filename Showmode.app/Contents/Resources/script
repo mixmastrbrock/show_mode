@@ -1,5 +1,8 @@
 #!/bin/bash
-echo "This script will configure your Mac for all needed software and settings for show mode."
+echo "Intended for initial deployment of HMXLive macOS devices."
+sleep 1
+echo "This script will configure this macOS device with all needed software and settings for regular use."
+sleep 10
 pretty_print() {
 printf "\n%b\n" "$1"
 }
@@ -19,8 +22,6 @@ pretty_print "Here we go..."
               pretty_print "You already have Homebrew installed...good job!"
             fi
             ###--- APPLICATION LIST ---###
-            read -p "Install applications [yN]?" REPLY
-            if [[ "$REPLY" =~ ^[Yy]$  ]]; then
               echo "Starting installtion of applications"
               brew install --cask iterm2
               brew install dockutil
@@ -49,58 +50,32 @@ pretty_print "Here we go..."
               #brew install --cask istat-server
               #brew install --cask atom
               #brew install --cask istat-menus
-              clear
               ###--- NON-SCRIPT APPLICATIONS ---###
               echo "Applications Installed. Two pages will open in your browser for additional downloads to be completed."
               sleep 2
               open https://www.blackmagicdesign.com/support/
               open https://bitfocus.io
-            else
-              echo "Skipping step"
-            fi
             ###--- SOFTWARE UPDATES ---###
-            read -p "Check for software updates [yN]?" REPLY
-            if [[ "$REPLY" =~ ^[Yy]$ ]]; then
               softwareupdate -l
               softwareupdate -d
-            else
-              echo "Skipping step"
-            fi
             ###--- WIFI ---###
-            read -p "Add common video WiFi networks [yN]?" REPLY
-            if [[ "$REPLY" =~ ^[Yy]$ ]]; then
               echo "Adding network..."
               networksetup -addpreferredwirelessnetworkatindex en0 "HMXVideo2_AP" 0 WPA2 "harvestvideo"
               networksetup -addpreferredwirelessnetworkatindex en0 "Lancelot" 0 WPA2 "cobalt42"
               networksetup -addpreferredwirelessnetworkatindex en0 "HP" 0 WPA "hpnkc2013"
-            else
-              echo "Skipping step"
-            fi
             ###--- HOSTNAME ---###
-            read -p "Change the hostname [yN]?" REPLY
-            if [[ "$REPLY" =~ ^[Yy]$ ]]; then
               read -p "Enter the hostname you want to use: " new_name
               sudo scutil --set ComputerName "$new_name"
               sudo scutil --set HostName "$new_name"
               sudo scutil --set LocalHostName "$new_name"
-            else
-              echo "Skipping step"
-            fi
             ###--- FILE SHARING ---###
-            read -p "Enable file sharing between machines [yN?]?" REPLY
-            if [[ "$REPLY" =~ ^[Yy]$  ]]; then
               read -p "Enter the folder name you wish to use: " folder
               echo "Adding directory and enabling sharing"
               mkdir ~/$folder/
               sudo sharing -a ~/$folder/ -s "$folder"
               sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.AppleFileServer.plist
               sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.smbd.plist
-            else
-              echo "Skipping step"
-            fi
             ###--- SYSTEM SETTINGS ---###
-            read -p "Apply system settings [yN]?" REPLY
-            if [[ "$REPLY" =~ ^[Yy]$  ]]; then
                echo "Now changing system settings"
                # Change desktop background to logo
                wget -o -q https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.zip
@@ -155,11 +130,6 @@ pretty_print "Here we go..."
                # Disable multiple Spaces in Mission Control
                sudo defaults write com.apple.spaces spans-displays -bool false
                echo "Disabled Spaces for external displays."
-             else
-               echo "Skipping step"
-             fi
-             read -p "Enable remote desktop (Run only once) [yN]?" REPLY
-             if [[ "$REPLY" =~ ^[Yy]$  ]]; then
                 echo "Now enabling remote desktop"
                # Enable Remote Management
                sudo defaults write /Library/Preferences/com.apple.RemoteManagement.plist VNCAlwaysStartOnConsole -bool true
@@ -171,11 +141,6 @@ pretty_print "Here we go..."
                sudo dscl . delete /Users/hmx-admin JPEGPhoto
                sudo dscl . create /Users/hmx-admin Picture "/Library/User Pictures/HMX-Play.png"
                echo "Enabled Remote Desktop"
-            else
-              echo "Skipping step"
-            fi
-            read -p "Configure dock [yN]?" REPLY
-            if [[ "$REPLY" =~ ^[Yy]$  ]]; then
                echo "Now configuring dock"
                # Backup the current dock preferences
                defaults export com.apple.dock ~/Desktop/dock_backup.plist
@@ -198,13 +163,9 @@ pretty_print "Here we go..."
                defaults write com.apple.dock autohide -bool false
                # Restart the dock to apply changes
                killall Dock
-               echo "Changed Dock size."
-            else
-              echo "Skipping step"
-            fi
+               echo "Dock configured"
 #        "Refresh Existing Install")
 #            ###--- REFRESH UPDATE---###
-#            #!/bin/bash
 #            brew upgrade
             ###--- APPLICATION LIST ---###
 #            read -p "Check for new applications [yN]?" REPLY
@@ -340,23 +301,9 @@ pretty_print "Here we go..."
               cron_command="0 0 1 * * ~/settings_cron.sh"
               echo "$cron_command" | crontab -
               echo "Installed."
-            continue 2
-            ;;
         echo "Setting desktop background..."
         wget -o -q https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.zip
         unzip showmode.zip
         automator -i "showmode-BG.png" ~/showmode.workflow
         rm -f showmode.zip
-        ;;
-        echo "Enabling Remote Desktop..."
-        sudo defaults write /Library/Preferences/com.apple.RemoteManagement.plist VNCAlwaysStartOnConsole -bool true
-        sudo defaults write /Library/Preferences/com.apple.RemoteManagement.plist ManagementADVCOptions -dict-add AppleVNCServerLoadPolicy -int 3
-        sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -restart -agent -privs -all -allowAccessFor -allUsers
-        sudo sysadminctl -addUser hmx-admin -password HMXLive24! -admin
-        wget -o -q https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/HMX-Play.png
-        sudo mv ~/HMX-Play.png /Library/User\ Pictures/
-        sudo dscl . delete /Users/hmx-admin JPEGPhoto
-        sudo dscl . create /Users/hmx-admin Picture "/Library/User Pictures/HMX-Play.png"
-        echo "Enabled Remote Desktop"
-        sleep 2
         echo "All done!"
