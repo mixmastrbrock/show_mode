@@ -60,54 +60,56 @@ pretty_print "Here we go..."
               softwareupdate -d
             ###--- WIFI ---###
               echo "Adding network..."
-              networksetup -addpreferredwirelessnetworkatindex en0 "HMXVideo2_AP" 0 WPA2 "harvestvideo"
               networksetup -addpreferredwirelessnetworkatindex en0 "Lancelot" 0 WPA2 "cobalt42"
               networksetup -addpreferredwirelessnetworkatindex en0 "HP" 0 WPA "hpnkc2013"
             ###--- HOSTNAME ---###
-              read -p "Enter the hostname you want to use: " new_name
-              sudo scutil --set ComputerName "$new_name"
-              sudo scutil --set HostName "$new_name"
-              sudo scutil --set LocalHostName "$new_name"
+            #Add bool for hostname entry
+#              read -p "Enter the hostname you want to use: " new_name
+#              sudo scutil --set ComputerName "$new_name"
+#              sudo scutil --set HostName "$new_name"
+#              sudo scutil --set LocalHostName "$new_name"
             ###--- FILE SHARING ---###
-              read -p "Enter the folder name you wish to use: " folder
-              echo "Adding directory and enabling sharing"
-              mkdir ~/$folder/
-              sudo sharing -a ~/$folder/ -s "$folder"
-              sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.AppleFileServer.plist
-              sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.smbd.plist
+#              read -p "Enter the folder name you wish to use: " folder
+#              echo "Adding directory and enabling sharing"
+#              mkdir ~/$folder/
+#              sudo sharing -a ~/$folder/ -s "$folder"
+#              sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.AppleFileServer.plist
+#              sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.smbd.plist
             ###--- SYSTEM SETTINGS ---###
-               echo "Now changing system settings"
+               echo "Appying system settings..."
                # Change desktop background to logo
+               echo "Changing desktop backgroud"
                wget -o -q https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.zip
                unzip showmode.zip
                automator -i "showmode-BG.png" ~/showmode.workflow
                rm -f showmode.zip
                # Change User Icons
+               echo "Setting user icon"
                wget -o -q https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/HMX-Play.png
                sudo mv ~/HMX-Play.png /Library/User\ Pictures/
                sudo dscl . delete /Users/$(whoami) JPEGPhoto
                sudo dscl . create /Users/$(whoami) Picture "/Library/User Pictures/HMX-Play.png"
                # Enable dark mode
+               echo "Enabling Dark Mode"
                osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
-               echo "Dark Mode enabled."
                # Enable Do Not Distrub
                osascript -e 'tell application "System Events" to tell notification preferences to set do not disturb to true'
-               echo "Do Not Disturb activated."
+               echo "Do Not Disturb activated"
                # Disable audio level click
                defaults write com.apple.sound.beep.feedback -bool false
-               echo "Deactivated audio feedback on level change."
+               echo "Deactivated audio feedback on level change"
                # Natural scrolling
                defaults write -g com.apple.swipescrolldirection -bool true
-               echo "Enabled Natural Scrolling."
+               echo "Enabled Natural Scrolling"
                defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
-               echo "Enabled Two-Finger Right Click."
+               echo "Enabled Two-Finger Right Click"
                # defaults write com.apple.driver.AppleHIDMouse Button2 -int 2
                # echo "Enabled Bottom-Right Click."
                # Disable Siri
                sudo defaults write /Library/Preferences/com.apple.Siri "VoiceTriggerUserEnabled" -int 0
                sudo launchctl unload -w /System/Library/LaunchAgents/com.apple.Siri.plist 2>/dev/null
                sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.Siri.plist 2>/dev/null
-               echo "Disabled Siri."
+               echo "Disabled Siri"
                # Power Settings
                sudo pmset -a sleep 0
                sudo pmset -a disksleep 0
@@ -115,21 +117,21 @@ pretty_print "Here we go..."
                sudo pmset -a womp 1
                sudo pmset -a autorestart 1
                sudo pmset -a powerbutton 0
-               echo "Changed power settings."
+               echo "Changed power settings"
                # Enable NTP
                sudo systemsetup -setusingnetworktime on
                # Enable SSH
                sudo systemsetup -setremotelogin on
-               echo "Enabled SSH."
+               echo "Enabled SSH"
                # Hide menu bar
                defaults write NSGlobalDomain _HIHideMenuBar -bool false
                killall Finder
-               echo "Hide Menu Bar."
+               echo "Hide Menu Bar"
                # Disable automatic software updates
                softwareupdate --schedule off
                # Disable multiple Spaces in Mission Control
                sudo defaults write com.apple.spaces spans-displays -bool false
-               echo "Disabled Spaces for external displays."
+               echo "Disabled Spaces for external displays"
                 echo "Now enabling remote desktop"
                # Enable Remote Management
                sudo defaults write /Library/Preferences/com.apple.RemoteManagement.plist VNCAlwaysStartOnConsole -bool true
@@ -141,7 +143,6 @@ pretty_print "Here we go..."
                sudo dscl . delete /Users/hmx-admin JPEGPhoto
                sudo dscl . create /Users/hmx-admin Picture "/Library/User Pictures/HMX-Play.png"
                echo "Enabled Remote Desktop"
-               echo "Now configuring dock"
                # Backup the current dock preferences
                defaults export com.apple.dock ~/Desktop/dock_backup.plist
                # List of bundle identifiers of apps to remove from the dock
@@ -300,7 +301,7 @@ pretty_print "Here we go..."
               launchctl load ~/Library/LaunchAgents/showmode.plist
               cron_command="0 0 1 * * ~/settings_cron.sh"
               echo "$cron_command" | crontab -
-              echo "Installed."
+              echo "Installed"
         echo "Setting desktop background..."
         wget -o -q https://raw.githubusercontent.com/mixmastrbrock/show_mode/main/showmode.zip
         unzip showmode.zip
