@@ -1,4 +1,7 @@
 #!/bin/bash
+pretty_print() {
+printf "\n%b\n" "$1"
+}
 echo "This script will configure your Mac for all needed software and settings for show mode."
 ###--- CRON UPDATE ---###
 while true; do
@@ -31,16 +34,17 @@ while true; do
             exit 0
             ;;
         "First Time Install")
-            echo "First Time Install Running..."
-            # Add your code to execute for Option 2
-            ###--- HOMEBREW INSTALL ---###
-            read -p "Have you installed Homebrew [yN]?" REPLY
-            if [[ "$REPLY" =~ ^[Yy]$  ]]; then
-               echo "Continuing script..."
-            #   ./bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          if ! command -v brew &>/dev/null; then
+            pretty_print "Installing Homebrew, an OSX package manager, follow the instructions..."
+              ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+              if ! grep -qs "recommended by brew doctor" ~/.zshrc; then
+                pretty_print "Put Homebrew location earlier in PATH ..."
+                printf '\n# recommended by brew doctor\n' >> ~/.zshrc
+                printf 'export PATH="/usr/local/bin:$PATH"\n' >> ~/.zshrc
+                export PATH="/usr/local/bin:$PATH"
+              fi
             else
-              echo "Please install Hombrew (https://brew.sh) before continuing."
-              exit
+              pretty_print "You already have Homebrew installed...good job!"
             fi
             ###--- APPLICATION LIST ---###
             read -p "Install applications [yN]?" REPLY
