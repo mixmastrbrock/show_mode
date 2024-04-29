@@ -416,12 +416,12 @@ while true; do
         ;;
         "Alan Settings")
           # Disable Natural Scrolling
-          sudo defaults write NSGlobalDomain com.apple.swipescrolldirection -int 0
+          sudo defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
           # Enable Right-Click using Bottom Right Corner of the Trackpad
           sudo defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -int 2
           sudo defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 2
-          sudo defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -int 0
-          sudo defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -int 0
+          sudo defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool false
+          sudo defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool false
           # Restart the necessary services to apply changes
           killall cfprefsd
           killall Dock
