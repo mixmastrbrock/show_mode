@@ -1,9 +1,12 @@
 #!/bin/bash
+pretty_print() {
+printf "\n%b\n" "$1"
+}
 echo "This script will configure your Mac for all needed software and settings for show mode."
 ###--- CRON UPDATE ---###
 while true; do
   PS3="Select an option:"
-  options=("Update" "First Time Install" "Refresh Existing Install" "Install Startup Script" "Set desktop background" "Enable Remote Desktop (Brock use only)" "Quit")
+  options=("Update" "First Time Install" "Refresh Existing Install" "Install Startup Script" "Set desktop background" "Enable Remote Desktop (Brock use only)" "Alan Settings" "Quit")
   select choice in "${options[@]}"; do
     case $choice in
         "Update")
@@ -31,22 +34,25 @@ while true; do
             exit 0
             ;;
         "First Time Install")
-            echo "First Time Install Running..."
-            # Add your code to execute for Option 2
-            ###--- HOMEBREW INSTALL ---###
-            read -p "Have you installed Homebrew [yN]?" REPLY
-            if [[ "$REPLY" =~ ^[Yy]$  ]]; then
-               echo "Continuing script..."
-            #   ./bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          if ! command -v brew &>/dev/null; then
+            pretty_print "Installing Homebrew, an OSX package manager, follow the instructions..."
+              ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+              if ! grep -qs "recommended by brew doctor" ~/.zshrc; then
+                pretty_print "Put Homebrew location earlier in PATH ..."
+                printf '\n# recommended by brew doctor\n' >> ~/.zshrc
+                printf 'export PATH="/usr/local/bin:$PATH"\n' >> ~/.zshrc
+                export PATH="/usr/local/bin:$PATH"
+              fi
             else
-              echo "Please install Hombrew (https://brew.sh) before continuing."
-              exit
+              pretty_print "You already have Homebrew installed...good job!"
             fi
             ###--- APPLICATION LIST ---###
             read -p "Install applications [yN]?" REPLY
             if [[ "$REPLY" =~ ^[Yy]$  ]]; then
               echo "Starting installtion of applications"
               brew install --cask iterm2
+              brew install mas
+              brew install mpv
               brew install dockutil
               brew install wget
               brew install ffmpeg
@@ -161,10 +167,15 @@ while true; do
                # Disable audio level click
                defaults write com.apple.sound.beep.feedback -bool false
                echo "Deactivated audio feedback on level change."
-               # Natural scrolling
-               defaults write -g com.apple.swipescrolldirection -bool true
+               # Enable Natural Scrolling
+               defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
                echo "Enabled Natural Scrolling."
+               # Enable Two-Finger Right-Click
+               defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
                defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
+               # Restart the necessary services to apply changes
+               killall cfprefsd
+               killall Dock
                echo "Enabled Two-Finger Right Click."
                # defaults write com.apple.driver.AppleHIDMouse Button2 -int 2
                # echo "Enabled Bottom-Right Click."
@@ -403,6 +414,18 @@ while true; do
         echo "Enabled Remote Desktop"
         continue 2
         ;;
+        "Alan Settings")
+          # Disable Natural Scrolling
+          defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
+          # Enable Right-Click using Bottom Right Corner of the Trackpad
+          defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -int 2
+          defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 2
+          defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool false
+          defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool false
+          # Restart the necessary services to apply changes
+          killall cfprefsd
+          killall Dock
+          ;;
         "Quit")
           exit 0
           ;;
