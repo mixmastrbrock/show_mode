@@ -15,14 +15,14 @@ echo "Do Not Disturb activated."
 defaults write com.apple.sound.beep.feedback -bool false
 echo "Deactivated audio feedback on level change."
 # Enable Natural Scrolling
-sudo defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
-echo "Enabled Natural Scrolling."
+#sudo defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
+#echo "Enabled Natural Scrolling."
 # Enable Two-Finger Right-Click
-sudo defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
-sudo defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
+#sudo defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
+#sudo defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
 # Restart the necessary services to apply changes
-killall cfprefsd
-killall Dock
+#killall cfprefsd
+#killall Dock
 brew upgrade
 softwareupdate -l
 softwareupdate -d
