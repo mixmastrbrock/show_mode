@@ -1,0 +1,313 @@
+#!/bin/bash
+# =============================================================================
+# Show Mode - Package Post-Installation Script
+# =============================================================================
+# Runs as root after the package payload is placed on disk.
+# Configures the macOS device for live event production use.
+# Designed for unattended deployment via MDM / Apple Business Manager.
+# =============================================================================
+
+set -eo pipefail
+
+LOG="/var/log/showmode-install.log"
+exec > >(tee -a "$LOG") 2>&1
+
+echo "=== Show Mode Post-Installation Started: $(date) ==="
+
+# ---------------------------------------------------------------------------
+# Identify the currently logged-in console user
+# ---------------------------------------------------------------------------
+CURRENT_USER=$(stat -f "%Su" /dev/console 2>/dev/null || echo "")
+
+if [ -z "$CURRENT_USER" ] || [ "$CURRENT_USER" = "root" ] || [ "$CURRENT_USER" = "_mbsetupuser" ]; then
+    echo "No standard user is logged in. User-context steps will be skipped."
+    USER_LOGGED_IN=false
+    USER_HOME=""
+    USER_UID=""
+else
+    USER_LOGGED_IN=true
+    USER_HOME=$(dscl . -read "/Users/$CURRENT_USER" NFSHomeDirectory 2>/dev/null | awk '{print $2}')
+    USER_UID=$(id -u "$CURRENT_USER")
+    echo "Configuring for user: $CURRENT_USER (UID: $USER_UID, home: $USER_HOME)"
+fi
+
+# Helper: run a command as the logged-in user inside their launchd session
+run_as_user() {
+    if $USER_LOGGED_IN; then
+        launchctl asuser "$USER_UID" sudo -u "$CURRENT_USER" "$@"
+    else
+        echo "[skip – no user] $*"
+    fi
+}
+
+# ---------------------------------------------------------------------------
+# HOMEBREW & APPLICATION INSTALLATION
+# ---------------------------------------------------------------------------
+# Homebrew must not run as root. We install it as the logged-in user and
+# use NONINTERACTIVE=1 to suppress all interactive prompts.
+# ---------------------------------------------------------------------------
+if $USER_LOGGED_IN; then
+
+    # Locate an existing Homebrew installation
+    BREW=""
+    for candidate in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+        if sudo -u "$CURRENT_USER" "$candidate" --version &>/dev/null 2>&1; then
+            BREW="$candidate"
+            break
+        fi
+    done
+
+    if [ -z "$BREW" ]; then
+        echo "Homebrew not found. Installing..."
+        run_as_user /bin/bash -c \
+            'NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+
+        # Re-locate brew after install
+        for candidate in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+            if [ -x "$candidate" ]; then
+                BREW="$candidate"
+                break
+            fi
+        done
+
+        # Add brew to the user's shell profile (Apple Silicon path)
+        if [ -n "$BREW" ] && ! grep -qs "brew shellenv" "$USER_HOME/.zshrc" 2>/dev/null; then
+            sudo -u "$CURRENT_USER" /bin/bash -c \
+                "echo 'eval \"\$(${BREW} shellenv)\"' >> \"$USER_HOME/.zshrc\""
+        fi
+    fi
+
+    if [ -n "$BREW" ]; then
+        BREW_PREFIX=$(sudo -u "$CURRENT_USER" "$BREW" --prefix 2>/dev/null || echo "")
+        echo "Using Homebrew at: $BREW (prefix: $BREW_PREFIX)"
+
+        echo "Installing applications..."
+        # Install each app; use || true so a single failure does not abort
+        sudo -u "$CURRENT_USER" "$BREW" install --cask iterm2            || true
+        sudo -u "$CURRENT_USER" "$BREW" install dockutil                 || true
+        sudo -u "$CURRENT_USER" "$BREW" install wget                     || true
+        sudo -u "$CURRENT_USER" "$BREW" install ffmpeg                   || true
+        sudo -u "$CURRENT_USER" "$BREW" install mediaconch               || true
+        sudo -u "$CURRENT_USER" "$BREW" install --cask google-chrome     || true
+        sudo -u "$CURRENT_USER" "$BREW" install --cask handbrake         || true
+        sudo -u "$CURRENT_USER" "$BREW" install --cask cyberduck         || true
+        sudo -u "$CURRENT_USER" "$BREW" install --cask caffeine          || true
+        sudo -u "$CURRENT_USER" "$BREW" install --cask elgato-stream-deck || true
+        sudo -u "$CURRENT_USER" "$BREW" install --cask vlc               || true
+        sudo -u "$CURRENT_USER" "$BREW" install --cask obs               || true
+        sudo -u "$CURRENT_USER" "$BREW" install --cask qlab              || true
+        sudo -u "$CURRENT_USER" "$BREW" install --cask propresenter      || true
+        sudo -u "$CURRENT_USER" "$BREW" install --cask atext             || true
+        sudo -u "$CURRENT_USER" "$BREW" install --cask zoom              || true
+        sudo -u "$CURRENT_USER" "$BREW" install --cask 4k-video-downloader || true
+        sudo -u "$CURRENT_USER" "$BREW" install --cask firefox           || true
+        sudo -u "$CURRENT_USER" "$BREW" install --cask microsoft-powerpoint || true
+        sudo -u "$CURRENT_USER" "$BREW" install --cask microsoft-excel   || true
+        sudo -u "$CURRENT_USER" "$BREW" install --cask microsoft-word    || true
+        sudo -u "$CURRENT_USER" "$BREW" install --cask wifiman           || true
+        echo "Application installation complete."
+
+        # Open browser pages for applications that require manual download
+        echo "Opening browser for manual downloads (Blackmagic, Bitfocus)..."
+        run_as_user open "https://www.blackmagicdesign.com/support/"
+        run_as_user open "https://bitfocus.io"
+    else
+        echo "Warning: Homebrew installation failed or not found. Skipping app install."
+    fi
+
+else
+    echo "Skipping Homebrew / app installation (no logged-in user)."
+fi
+
+# ---------------------------------------------------------------------------
+# SOFTWARE UPDATES
+# ---------------------------------------------------------------------------
+echo "Checking for Apple software updates..."
+softwareupdate --list 2>&1 || true
+softwareupdate --download --all --agree-to-license 2>&1 || true
+
+# ---------------------------------------------------------------------------
+# WI-FI NETWORKS
+# ---------------------------------------------------------------------------
+echo "Adding preferred Wi-Fi networks..."
+networksetup -addpreferredwirelessnetworkatindex en0 "HMXVideo2_AP" 0 WPA2 "harvestvideo" || true
+networksetup -addpreferredwirelessnetworkatindex en0 "Lancelot"     0 WPA2 "cobalt42"     || true
+networksetup -addpreferredwirelessnetworkatindex en0 "HP"           0 WPA  "hpnkc2013"    || true
+
+# ---------------------------------------------------------------------------
+# DESKTOP BACKGROUND
+# ---------------------------------------------------------------------------
+echo "Setting desktop background..."
+HMX_BG="/Library/Application Support/HMX/Showmode-BG.png"
+HMX_WORKFLOW="/Library/Application Support/HMX/showmode.workflow"
+
+if [ -f "$HMX_BG" ] && [ -d "$HMX_WORKFLOW" ] && $USER_LOGGED_IN; then
+    run_as_user automator -i "$HMX_BG" "$HMX_WORKFLOW" || true
+fi
+
+# ---------------------------------------------------------------------------
+# USER ICON
+# ---------------------------------------------------------------------------
+echo "Setting user icon..."
+HMX_ICON="/Library/Application Support/HMX/HMX-Play.png"
+
+if [ -f "$HMX_ICON" ]; then
+    cp "$HMX_ICON" "/Library/User Pictures/HMX-Play.png" || true
+    if $USER_LOGGED_IN; then
+        dscl . delete "/Users/$CURRENT_USER" JPEGPhoto 2>/dev/null || true
+        dscl . create "/Users/$CURRENT_USER" Picture "/Library/User Pictures/HMX-Play.png" || true
+    fi
+fi
+
+# ---------------------------------------------------------------------------
+# SYSTEM SETTINGS
+# ---------------------------------------------------------------------------
+echo "Applying system settings..."
+
+# Dark mode (user-context)
+run_as_user osascript \
+    -e 'tell application "System Events" to tell appearance preferences to set dark mode to true' || true
+
+# Do Not Disturb (user-context; no-op on macOS 12+ where DND is managed via Focus)
+run_as_user osascript \
+    -e 'tell application "System Events" to tell notification preferences to set do not disturb to true' 2>/dev/null || true
+
+# Disable audio feedback on volume change
+defaults write com.apple.sound.beep.feedback -bool false
+
+# Natural scrolling & trackpad right-click (system-wide defaults)
+defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
+defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
+killall cfprefsd 2>/dev/null || true
+
+# Disable Siri
+defaults write /Library/Preferences/com.apple.Siri VoiceTriggerUserEnabled -int 0
+launchctl unload -w /System/Library/LaunchAgents/com.apple.Siri.plist 2>/dev/null || true
+launchctl unload -w /System/Library/LaunchDaemons/com.apple.Siri.plist 2>/dev/null || true
+
+# Power management — never sleep, wake on network, auto-restart
+pmset -a sleep 0
+pmset -a disksleep 0
+pmset -a displaysleep 0
+pmset -a womp 1
+pmset -a autorestart 1
+pmset -a powerbutton 0
+
+# NTP
+systemsetup -setusingnetworktime on 2>/dev/null || true
+
+# SSH (Remote Login)
+systemsetup -setremotelogin on 2>/dev/null || true
+
+# Keep menu bar visible
+defaults write NSGlobalDomain _HIHideMenuBar -bool false
+killall Finder 2>/dev/null || true
+
+# Disable automatic software update scheduling
+softwareupdate --schedule off 2>/dev/null || true
+
+# Disable Spaces spanning across displays (Mission Control)
+defaults write com.apple.spaces spans-displays -bool false
+
+# ---------------------------------------------------------------------------
+# REMOTE DESKTOP (Apple Remote Desktop / VNC)
+# ---------------------------------------------------------------------------
+echo "Enabling Remote Desktop..."
+defaults write /Library/Preferences/com.apple.RemoteManagement.plist \
+    VNCAlwaysStartOnConsole -bool true
+defaults write /Library/Preferences/com.apple.RemoteManagement.plist \
+    ManagementADVCOptions -dict-add AppleVNCServerLoadPolicy -int 3
+
+/System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
+    -activate -configure -access -on -restart -agent \
+    -privs -all -allowAccessFor -allUsers 2>/dev/null || true
+
+# Create the shared HMX admin account
+sysadminctl -addUser hmx-admin -password "HMXLive24!" -admin 2>/dev/null || \
+    echo "hmx-admin already exists or could not be created."
+
+if [ -f "/Library/User Pictures/HMX-Play.png" ]; then
+    dscl . delete /Users/hmx-admin JPEGPhoto 2>/dev/null || true
+    dscl . create /Users/hmx-admin Picture "/Library/User Pictures/HMX-Play.png" || true
+fi
+
+# ---------------------------------------------------------------------------
+# DOCK CONFIGURATION
+# ---------------------------------------------------------------------------
+if $USER_LOGGED_IN; then
+    # Locate dockutil — may be in Homebrew or already on PATH
+    DOCKUTIL=""
+    for candidate in \
+        "$(command -v dockutil 2>/dev/null)" \
+        "${BREW_PREFIX:-}/bin/dockutil" \
+        /opt/homebrew/bin/dockutil \
+        /usr/local/bin/dockutil; do
+        if [ -x "$candidate" ]; then
+            DOCKUTIL="$candidate"
+            break
+        fi
+    done
+
+    if [ -n "$DOCKUTIL" ]; then
+        echo "Configuring dock with dockutil at: $DOCKUTIL"
+
+        # Backup
+        run_as_user defaults export com.apple.dock "$USER_HOME/Desktop/dock_backup.plist" || true
+
+        # Remove default Apple apps
+        sudo -u "$CURRENT_USER" "$DOCKUTIL" \
+            -r "/System/Applications/Messages.app" \
+            -r "/System/Applications/Mail.app" \
+            -r "/System/Applications/Maps.app" \
+            -r "/System/Applications/Photos.app" \
+            -r "/System/Applications/FaceTime.app" \
+            -r "/System/Applications/Contacts.app" \
+            -r "/System/Applications/TV.app" \
+            -r "/System/Applications/Music.app" \
+            -r "/System/Applications/News.app" \
+            --no-restart 2>/dev/null || true
+
+        # Add show mode apps (skip if app not yet installed)
+        sudo -u "$CURRENT_USER" "$DOCKUTIL" -a "/Applications/Google Chrome.app"            --label Chrome      --no-restart 2>/dev/null || true
+        sudo -u "$CURRENT_USER" "$DOCKUTIL" -a "/Applications/ProPresenter.app"            --label ProPresenter --no-restart 2>/dev/null || true
+        sudo -u "$CURRENT_USER" "$DOCKUTIL" -a "/Applications/Keynote.app"                 --label Keynote     --no-restart 2>/dev/null || true
+        sudo -u "$CURRENT_USER" "$DOCKUTIL" -a "/Applications/Microsoft PowerPoint.app"    --label PowerPoint  --no-restart 2>/dev/null || true
+        sudo -u "$CURRENT_USER" "$DOCKUTIL" -a "/Applications/QLab.app"                    --label QLab        --no-restart 2>/dev/null || true
+        sudo -u "$CURRENT_USER" "$DOCKUTIL" -a "/Applications/Cyberduck.app"               --label Cyberduck   --no-restart 2>/dev/null || true
+
+        # Reorder
+        sudo -u "$CURRENT_USER" "$DOCKUTIL" -m Chrome      -p 3 --no-restart 2>/dev/null || true
+        sudo -u "$CURRENT_USER" "$DOCKUTIL" -m ProPresenter -p 4 --no-restart 2>/dev/null || true
+        sudo -u "$CURRENT_USER" "$DOCKUTIL" -m Keynote     -p 5 --no-restart 2>/dev/null || true
+        sudo -u "$CURRENT_USER" "$DOCKUTIL" -m PowerPoint  -p 6 --no-restart 2>/dev/null || true
+        sudo -u "$CURRENT_USER" "$DOCKUTIL" -m QLab        -p 7 --no-restart 2>/dev/null || true
+        sudo -u "$CURRENT_USER" "$DOCKUTIL" -m Cyberduck   -p 8               2>/dev/null || true
+
+        # Dock appearance
+        run_as_user defaults write com.apple.dock tilesize  -integer 48
+        run_as_user defaults write com.apple.dock autohide  -bool false
+        killall Dock 2>/dev/null || true
+
+        echo "Dock configuration complete."
+    else
+        echo "dockutil not found. Skipping dock configuration."
+    fi
+else
+    echo "Skipping dock configuration (no logged-in user)."
+fi
+
+# ---------------------------------------------------------------------------
+# LAUNCH DAEMON
+# ---------------------------------------------------------------------------
+# The LaunchDaemon plist was installed to /Library/LaunchDaemons/ as part
+# of the package payload. Load it now so it starts immediately without a reboot.
+echo "Enabling Show Mode maintenance daemon..."
+PLIST="/Library/LaunchDaemons/com.hmx.showmode.plist"
+if [ -f "$PLIST" ]; then
+    launchctl load "$PLIST" 2>/dev/null || \
+        launchctl bootstrap system "$PLIST" 2>/dev/null || true
+fi
+
+echo "=== Show Mode Installation Complete: $(date) ==="
+exit 0
