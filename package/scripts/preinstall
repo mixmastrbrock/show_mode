@@ -1,0 +1,40 @@
+#!/bin/bash
+# =============================================================================
+# Show Mode - Package Pre-Installation Script
+# =============================================================================
+# Runs as root before the package payload is placed on disk.
+# Returns non-zero to abort installation if requirements are not met.
+# =============================================================================
+
+LOG="/var/log/showmode-install.log"
+exec > >(tee -a "$LOG") 2>&1
+
+echo "=== Show Mode Pre-Installation Check: $(date) ==="
+
+# ---------------------------------------------------------------------------
+# Check macOS version (require 10.15 Catalina or later)
+# ---------------------------------------------------------------------------
+OS_MAJOR=$(sw_vers -productVersion | cut -d. -f1)
+OS_MINOR=$(sw_vers -productVersion | cut -d. -f2)
+OS_VERSION=$(sw_vers -productVersion)
+
+if [ "$OS_MAJOR" -lt 11 ] && { [ "$OS_MAJOR" -lt 10 ] || [ "$OS_MINOR" -lt 15 ]; }; then
+    echo "Error: Show Mode requires macOS 10.15 (Catalina) or later."
+    echo "Current version: $OS_VERSION"
+    exit 1
+fi
+
+echo "macOS version OK: $OS_VERSION"
+
+# ---------------------------------------------------------------------------
+# Check network connectivity (warn only — Homebrew requires internet)
+# ---------------------------------------------------------------------------
+if ! curl --silent --connect-timeout 5 --head --fail "https://github.com" > /dev/null 2>&1; then
+    echo "Warning: No internet connection detected."
+    echo "Application installation via Homebrew will be skipped."
+    echo "Re-run the package when internet access is available."
+    # Do not fail — system settings can still be applied offline
+fi
+
+echo "Pre-installation checks passed."
+exit 0

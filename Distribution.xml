@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Distribution definition for productbuild.
+    Referenced by build.sh when creating the final .pkg.
+
+    Docs: https://developer.apple.com/library/archive/documentation/DeveloperTools/Reference/DistributionDefinitionRef/
+-->
+<installer-gui-script minSpecVersion="1">
+
+    <title>Show Mode</title>
+    <organization>com.hmx</organization>
+    <background alignment="bottomleft" file="Showmode-BG.png" mime-type="image/png" scaling="proportional"/>
+
+    <!-- Require root authentication; run silently when deployed by MDM -->
+    <options
+        customize="never"
+        require-scripts="true"
+        allow-external-scripts="yes"
+        rootVolumeOnly="true"
+    />
+
+    <!-- Minimum supported macOS version -->
+    <volume-check>
+        <allowed-os-versions>
+            <os-version min="10.15"/>
+        </allowed-os-versions>
+    </volume-check>
+
+    <!-- Single-package install (no choices presented to the user) -->
+    <choices-outline>
+        <line choice="com.hmx.pkg.showmode"/>
+    </choices-outline>
+
+    <choice
+        id="com.hmx.pkg.showmode"
+        title="Show Mode"
+        description="Configures this Mac for live event production use."
+        start_selected="true"
+        start_enabled="false"
+        start_visible="true"
+    >
+        <pkg-ref id="com.hmx.pkg.showmode"/>
+    </choice>
+
+    <!--
+        The component pkg filename must match what build.sh produces.
+        productbuild resolves this relative to --package-path.
+    -->
+    <pkg-ref
+        id="com.hmx.pkg.showmode"
+        version="1.0"
+        onConclusion="none"
+    >ShowMode-1.0-component.pkg</pkg-ref>
+
+</installer-gui-script>
